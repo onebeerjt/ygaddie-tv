@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<title>YG ADDIE TV — MARINO INFANTRY BROADCASTING</title>
+<meta name="description" content="Flip the channels. YG Addie TV — music, film, merch. Marino Infantry broadcasting, always on.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&family=Audiowide&family=Black+Ops+One&family=Saira+Stencil+One&family=Archivo+Black&family=Space+Grotesk:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600;700&display=swap">
+<style>
+/* ============ RESET / BASE ============ */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:'Space Grotesk',system-ui,sans-serif;
+  color:#f2f2f2; min-height:100dvh; overflow-x:hidden;
+  transition:background .5s ease;
+}
+/* ============ THEME TOKENS ============ */
+body[data-theme="crt"]{
+  --bg:#141210; --bg2:#1d1a16;
+  --bezel1:#5a4632; --bezel2:#3a2d1f; --bezel-edge:#221a12;
+  --accent:#39ff6a; --accent-dim:#1d9e44; --osd:#39ff6a;
+  --head-font:'VT323',monospace; --body-font:'IBM Plex Mono',monospace;
+  --scan-op:.34; --curve:26px; --noise-op:.5;
+  --btn-bg:#241d15; --btn-fg:#39ff6a; --btn-edge:#0d0b08;
+  --glow:0 0 12px rgba(57,255,106,.55);
+}
+body[data-theme="mtv"]{
+  --bg:#0d0221; --bg2:#1b0b3a;
+  --bezel1:#2a1b4e; --bezel2:#120826; --bezel-edge:#05030d;
+  --accent:#ff2fb3; --accent2:#00e5ff; --accent3:#ffe600; --osd:#00e5ff;
+  --head-font:'Audiowide',cursive; --body-font:'Space Grotesk',sans-serif;
+  --scan-op:.14; --curve:14px; --noise-op:.35;
+  --btn-bg:#1b0b3a; --btn-fg:#00e5ff; --btn-edge:#05030d;
+  --glow:0 0 14px rgba(255,47,179,.6);
+}
+body[data-theme="army"]{
+  --bg:#20241a; --bg2:#2b3020;
+  --bezel1:#4a5320; --bezel2:#33391a; --bezel-edge:#14160c;
+  --accent:#c8ff3d; --accent2:#c8b88a; --osd:#c8ff3d;
+  --head-font:'Black Ops One',system-ui; --body-font:'Saira Stencil One',system-ui;
+  --scan-op:.22; --curve:8px; --noise-op:.4;
+  --btn-bg:#2b3020; --btn-fg:#c8ff3d; --btn-edge:#0c0e06;
+  --glow:0 0 10px rgba(200,255,61,.4);
+}
+body{background:radial-gradient(1200px 800px at 50% -10%,var(--bg2),var(--bg)) fixed,var(--bg)}
+/* ============ MASTHEAD ============ */
+#masthead{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:12px 16px;max-width:1100px;margin:0 auto;flex-wrap:wrap;
+}
+.brand h1{
+  font-family:var(--head-font);font-size:clamp(26px,6vw,44px);letter-spacing:.04em;line-height:1;
+  color:#fff;
+}
+body[data-theme="crt"] .brand h1{color:var(--accent);text-shadow:var(--glow)}
+body[data-theme="mtv"] .brand h1{
+  background:linear-gradient(180deg,#fff 20%,var(--accent2) 45%,var(--accent) 60%,#7a0e4d 90%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 10px rgba(255,47,179,.5));
+}
+body[data-theme="army"] .brand h1{color:var(--accent2);text-shadow:2px 2px 0 #000}
+.brand p{font-family:var(--body-font);font-size:11px;letter-spacing:.32em;opacity:.75;margin-top:4px}
+#themebar{display:flex;gap:6px;align-items:center}
+#themebar span{font-family:var(--body-font);font-size:10px;letter-spacing:.2em;opacity:.6;margin-right:2px}
+.tbtn{
+  font-family:var(--body-font);font-size:11px;letter-spacing:.12em;cursor:pointer;
+  background:var(--btn-bg);color:var(--btn-fg);border:1px solid var(--btn-edge);
+  padding:8px 12px;border-radius:6px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+}
+.tbtn.on{background:var(--btn-fg);color:#0a0a0a;font-weight:700}
+.tbtn:active{transform:translateY(1px)}
+/* ============ TV SET ============ */
+#stage{max-width:1100px;margin:0 auto;padding:0 14px}
+#tv{
+  background:linear-gradient(160deg,var(--bezel1),var(--bezel2) 60%,var(--bezel-edge));
+  border-radius:22px;padding:clamp(10px,2.5vw,26px);
+  box-shadow:0 30px 80px rgba(0,0,0,.65),inset 0 2px 2px rgba(255,255,255,.12),inset 0 -3px 6px rgba(0,0,0,.5);
+  position:relative;transition:background .5s ease;
+}
+body[data-theme="crt"] #tv{
+  background:
+    repeating-linear-gradient(93deg,rgba(0,0,0,.14) 0 3px,transparent 3px 7px),
+    linear-gradient(160deg,#6b5138,#4a3826 55%,#241a10);
+}
+body[data-theme="mtv"] #tv{
+  border:1px solid rgba(255,47,179,.35);
+  box-shadow:0 0 60px rgba(255,47,179,.25),0 30px 80px rgba(0,0,0,.65);
+}
+body[data-theme="army"] #tv{
+  background:
+    radial-gradient(circle at 20% 30%,rgba(120,140,70,.5) 0 60px,transparent 61px),
+    radial-gradient(circle at 75% 65%,rgba(60,70,35,.6) 0 90px,transparent 91px),
+    radial-gradient(circle at 45% 85%,rgba(150,160,100,.35) 0 50px,transparent 51px),
+    linear-gradient(160deg,#4a5320,#33391a 60%,#14160c);
+}
+/* knobs row */
+#tvtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding:0 4px}
+#tvtop .model{font-family:var(--body-font);font-size:10px;letter-spacing:.3em;opacity:.65}
+.knobs{display:flex;gap:10px}
+.knob{
+  width:34px;height:34px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#6a6a6a,#2b2b2b 70%);
+  box-shadow:0 2px 5px rgba(0,0,0,.6),inset 0 1px 1px rgba(255,255,255,.25);
+  position:relative;cursor:pointer;
+}
+.knob::after{content:"";position:absolute;left:50%;top:3px;width:3px;height:10px;background:var(--accent);transform:translateX(-50%);border-radius:2px;box-shadow:var(--glow)}
+/* ============ SCREEN ============ */
+#screenwrap{position:relative}
+#screen{
+  position:relative;width:100%;aspect-ratio:16/9;background:#000;overflow:hidden;
+  border-radius:var(--curve);
+  box-shadow:inset 0 0 60px rgba(0,0,0,.9),inset 0 0 8px #000,0 0 0 4px #0a0a0a;
+}
+body[data-theme="crt"] #screen{
+  border-radius:var(--curve);
+  box-shadow:inset 0 0 90px rgba(0,0,0,.95),inset 0 0 12px #000,0 0 0 5px #0d0b08,0 0 45px rgba(57,255,106,.12);
+}
+#player{position:absolute;inset:0;width:100%;height:100%}
+#player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+/* overlays */
+.fx{position:absolute;inset:0;pointer-events:none}
+#scanlines{
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.55) 0 1px,transparent 1px 3px);
+  opacity:var(--scan-op);z-index:5;mix-blend-mode:multiply;
+}
+body[data-theme="mtv"] #scanlines{background:repeating-linear-gradient(0deg,rgba(255,0,200,.18) 0 1px,transparent 1px 4px);mix-blend-mode:screen}
+#vignette{background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.55) 100%);z-index:6}
+#aperture{
+  background:repeating-linear-gradient(90deg,rgba(255,0,80,.05) 0 2px,rgba(0,255,120,.05) 2px 4px,rgba(0,80,255,.05) 4px 6px);
+  opacity:.5;z-index:5;
+}
+#staticCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:7;display:none;image-rendering:pixelated;opacity:var(--noise-op)}
+/* VHS tracking band */
+#trackband{
+  position:absolute;left:-5%;width:110%;height:56px;z-index:8;display:none;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(255,255,255,.16) 30%,rgba(255,255,255,.28) 50%,rgba(255,255,255,.16) 70%,transparent);
+  mix-blend-mode:screen;filter:blur(1px);
+}
+#screen.tracking #trackband{display:block;animation:trackmove .7s linear}
+#screen.tracking{animation:trackjitter .12s steps(2) 6}
+@keyframes trackmove{from{top:-15%}to{top:110%}}
+@keyframes trackjitter{0%{transform:translateX(0);filter:none}25%{transform:translateX(-7px);filter:hue-rotate(40deg) saturate(1.6)}50%{transform:translateX(5px)}75%{transform:translateX(-4px);filter:hue-rotate(-30deg)}100%{transform:translateX(0)}}
+/* OSD channel number */
+#osd{
+  position:absolute;top:5%;right:5%;z-index:10;pointer-events:none;
+  font-family:var(--head-font);font-size:clamp(44px,9vw,84px);line-height:1;color:var(--osd);
+  text-shadow:var(--glow);opacity:0;transition:opacity .25s;
+}
+#osd.show{opacity:1}
+#osd small{display:block;font-size:.32em;letter-spacing:.28em;opacity:.85}
+/* LIVE bug */
+#livebug{
+  position:absolute;top:5%;left:5%;z-index:10;display:flex;align-items:center;gap:8px;
+  font-family:var(--body-font);font-size:12px;letter-spacing:.25em;pointer-events:none;
+  background:rgba(0,0,0,.55);padding:6px 12px;border-radius:4px;border:1px solid rgba(255,255,255,.15);
+}
+#livebug i{width:10px;height:10px;border-radius:50%;background:#ff2b2b;box-shadow:0 0 8px #ff2b2b;animation:blink 1.2s infinite}
+@keyframes blink{50%{opacity:.25}}
+/* now-playing bar */
+#nowbar{
+  position:absolute;left:0;right:0;bottom:0;z-index:10;pointer-events:none;
+  padding:10px 14px;background:linear-gradient(0deg,rgba(0,0,0,.85),transparent);
+  font-family:var(--body-font);
+}
+#nowbar .ch{font-size:11px;letter-spacing:.3em;color:var(--osd);opacity:.9}
+#nowbar .t{font-family:var(--head-font);font-size:clamp(20px,4.5vw,34px);color:#fff;line-height:1.05;margin-top:2px}
+body[data-theme="crt"] #nowbar .t{color:var(--accent);text-shadow:var(--glow)}
+/* merch overlay (CH 03) */
+#merch{
+  position:absolute;inset:0;z-index:9;display:none;pointer-events:none;
+  align-items:flex-end;justify-content:center;padding-bottom:64px;
+}
+#merch.show{display:flex}
+#merch a{
+  pointer-events:auto;text-decoration:none;font-family:var(--head-font);
+  font-size:clamp(20px,4.5vw,30px);letter-spacing:.06em;color:#0a0a0a;
+  background:var(--accent);padding:12px 26px;border-radius:6px;box-shadow:var(--glow);
+  animation:pulsebtn 1.6s infinite;
+}
+@keyframes pulsebtn{50%{transform:scale(1.05)}}
+/* CH 05 slogan wall */
+#slogans{
+  position:absolute;inset:0;z-index:8;display:none;align-items:center;justify-content:center;
+  text-align:center;padding:20px;background:rgba(0,0,0,.35);
+}
+#slogans.show{display:flex}
+#slogan{
+  font-family:var(--head-font);font-size:clamp(34px,9vw,80px);line-height:1.05;color:#fff;
+  animation:sloganglitch 2.6s infinite;
+}
+body[data-theme="crt"] #slogan{color:var(--accent);text-shadow:var(--glow)}
+@keyframes sloganglitch{
+  0%,93%,100%{transform:none;opacity:1}
+  94%{transform:translateX(-8px) skewX(-4deg);opacity:.7;text-shadow:-4px 0 #ff2b2b,4px 0 #00e5ff}
+  96%{transform:translateX(6px);opacity:1}
+  98%{transform:translateX(-3px) skewX(2deg)}
+}
+/* ============ CONTROLS ============ */
+#controls{max-width:1100px;margin:0 auto;padding:16px 14px 8px;display:grid;gap:12px}
+#chrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.chbtn{
+  font-family:var(--body-font);font-size:13px;letter-spacing:.08em;cursor:pointer;min-width:64px;
+  background:var(--btn-bg);color:var(--btn-fg);border:1px solid var(--btn-edge);
+  padding:12px 14px;border-radius:8px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 3px 0 rgba(0,0,0,.45);
+}
+.chbtn small{display:block;font-size:9px;opacity:.65;letter-spacing:.14em;margin-top:2px}
+.chbtn.on{background:var(--btn-fg);color:#0a0a0a;font-weight:700;box-shadow:var(--glow)}
+.chbtn:active{transform:translateY(2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+#bigrow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.bigbtn{
+  font-family:var(--head-font);font-size:clamp(18px,4vw,24px);letter-spacing:.06em;cursor:pointer;
+  padding:14px 26px;border-radius:10px;border:1px solid var(--btn-edge);
+  background:var(--btn-bg);color:var(--btn-fg);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 4px 0 rgba(0,0,0,.5);
+}
+.bigbtn:active{transform:translateY(3px);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+#unmute{background:var(--btn-fg);color:#0a0a0a;font-weight:700}
+#hint{text-align:center;font-family:var(--body-font);font-size:11px;letter-spacing:.18em;opacity:.5}
+/* ============ FOOTER ============ */
+#footer{max-width:1100px;margin:0 auto;padding:18px 16px 40px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;align-items:center}
+.flink{
+  font-family:var(--body-font);font-size:12px;letter-spacing:.14em;text-decoration:none;
+  color:var(--btn-fg);border:1px solid var(--btn-edge);background:var(--btn-bg);
+  padding:12px 20px;border-radius:8px;
+}
+.flink b{font-weight:700}
+#fine{width:100%;text-align:center;font-family:var(--body-font);font-size:10px;letter-spacing:.22em;opacity:.4;margin-top:6px}
+/* hazard stripe divider for army theme */
+#stripe{height:10px;margin:14px 0 0;background:repeating-linear-gradient(-45deg,var(--accent) 0 18px,#111 18px 36px);opacity:.85;display:none}
+body[data-theme="army"] #stripe{display:block}
+@media (max-width:640px){
+  #masthead{padding:10px 12px}
+  .brand p{letter-spacing:.22em}
+  #tv{border-radius:16px}
+  #chrow{display:grid;grid-template-columns:repeat(5,1fr)}
+  .chbtn{min-width:0;padding:10px 4px;font-size:11px}
+}
+</style>
+</head>
+<body data-theme="crt">
+
+<header id="masthead">
+  <div class="brand">
+    <h1>YG ADDIE TV</h1>
+    <p>MARINO INFANTRY BROADCASTING CO.</p>
+  </div>
+  <div id="themebar" role="group" aria-label="Theme">
+    <span>SIGNAL</span>
+    <button class="tbtn on" data-settheme="crt">CRT</button>
+    <button class="tbtn" data-settheme="mtv">MTV&nbsp;85</button>
+    <button class="tbtn" data-settheme="army">ARMY</button>
+  </div>
+</header>
+
+<div id="stripe"></div>
+
+<main id="stage">
+  <div id="tv">
+    <div id="tvtop">
+      <div class="model">MODEL MI-1905 · COLORTRACK · STEREO</div>
+      <div class="knobs">
+        <div class="knob" id="knobVol" title="Volume"></div>
+        <div class="knob" id="knobTune" title="Tuning"></div>
+      </div>
+    </div>
+    <div id="screenwrap">
+      <div id="screen">
+        <div id="player"></div>
+        <div id="slogans"><div id="slogan">MARINO INFANTRY</div></div>
+        <div id="merch">
+          <a href="https://infantryskate.com" target="_blank" rel="noopener" id="shoplink">SHOP THE DROP &#8599;</a>
+        </div>
+        <canvas id="staticCanvas" width="160" height="90"></canvas>
+        <div id="trackband"></div>
+        <div class="fx" id="aperture"></div>
+        <div class="fx" id="scanlines"></div>
+        <div class="fx" id="vignette"></div>
+        <div id="livebug"><i></i>LIVE</div>
+        <div id="osd">CH 01<small id="osdname">MUSIC</small></div>
+        <div id="nowbar">
+          <div class="ch" id="nowch">CH 01 · MUSIC</div>
+          <div class="t" id="nowt">TESTAROSSA</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="controls">
+    <div id="chrow" role="group" aria-label="Channels"></div>
+    <div id="bigrow">
+      <button class="bigbtn" id="chdown" aria-label="Channel down">&#9664; CH</button>
+      <button class="bigbtn" id="unmute">&#128266; UNMUTE</button>
+      <button class="bigbtn" id="chup" aria-label="Channel up">CH &#9654;</button>
+    </div>
+    <div id="hint">TAP CH &#9654;&#9664; · KEYS 1&ndash;5 · SWIPE THE SCREEN</div>
+  </div>
+</main>
+
+<footer id="footer">
+  <a class="flink" href="https://instagram.com/ygaddie" target="_blank" rel="noopener"><b>@YGADDIE</b> · INSTAGRAM</a>
+  <a class="flink" href="https://infantryskate.com" target="_blank" rel="noopener"><b>MARINO INFANTRY</b> · SHOP &#8599;</a>
+  <a class="flink" href="mailto:YGADDIEBOOKINGS@YAHOO.COM"><b>BOOKING</b> · YGADDIEBOOKINGS@YAHOO.COM</a>
+  <div id="fine">A$AP MOB · DMV TO THE WORLD · 35MM OR NOTHING</div>
+</footer>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+/* ================= CHANNELS ================= */
+const CHANNELS = [
+  { n:1, name:'MUSIC',       title:'TESTAROSSA',            sub:'YGADDIE ft. Hoodrich Pablo & Offset', video:'YlqHQJjqaw0' },
+  { n:2, name:'MARINO PARIS',title:'MARINO PARIS · CH. 2',  sub:'35MM FILM',                            video:'DbI_ZDw3jxg' },
+  { n:3, name:'MERCH',       title:'INFANTRY SUPPLY',       sub:'NEW DROP LIVE NOW',                    video:'D762ONFvyFY', merch:true },
+  { n:4, name:'SKATE / FILM',title:'MARINO PARIS · ALT CUT',sub:'SHOT ON FILM',                         video:'a5ZsibKdiJQ' },
+  { n:5, name:'STATIC',      title:'TRANSMISSION',          sub:'INTERCEPTED SIGNAL',                   static:true },
+];
+const SLOGANS = ['MARINO INFANTRY','STAY DANGEROUS','35MM OR NOTHING','DMV TO THE WORLD',
+  'SKATE OR DIE','NO PERMISSION NEEDED','HUEY P IN A HELLCAT','BALTIMORE STAND UP',
+  'A$AP MOB','INFANTRY FIRST','OFF-WHITE / CAMO / BLACK'];
+let current = 0, muted = true, sloganTimer = null, staticRAF = null;
+
+/* ================= STATIC NOISE ================= */
+const sc = document.getElementById('staticCanvas');
+const sctx = sc.getContext('2d');
+function drawNoise(){
+  const w = sc.width, h = sc.height, img = sctx.createImageData(w,h), d = img.data;
+  for(let i=0;i<d.length;i+=4){ const v = Math.random()*255|0; d[i]=d[i+1]=d[i+2]=v; d[i+3]=255; }
+  sctx.putImageData(img,0,0);
+}
+function burstStatic(ms){
+  sc.style.display = 'block'; drawNoise();
+  const t0 = performance.now();
+  (function tick(t){
+    if(t - t0 > ms){ sc.style.display='none'; return; }
+    drawNoise(); requestAnimationFrame(tick);
+  })(t0);
+}
+function startStaticLoop(){
+  sc.style.display='block';
+  let last=0;
+  (function loop(t){
+    if(!staticRAF) return;
+    if(t-last>90){ drawNoise(); last=t; }
+    staticRAF = requestAnimationFrame(loop);
+  })(0);
+}
+function stopStaticLoop(){ staticRAF=null; sc.style.display='none'; }
+
+/* ================= YOUTUBE ================= */
+let player=null, playerReady=false;
+function onYouTubeIframeAPIReady(){
+  player = new YT.Player('player',{
+    width:'100%', height:'100%',
+    playerVars:{ autoplay:1, mute:1, controls:0, disablekb:1, fs:0,
+      iv_load_policy:3, modestbranding:1, playsinline:1, rel:0 },
+    events:{ onReady:onPlayerReady }
+  });
+}
+function onPlayerReady(){
+  playerReady=true; player.mute(); muted=true;
+  tune(current,{instant:true});
+}
+
+/* ================= TUNING ================= */
+const screen=document.getElementById('screen'),
+      osd=document.getElementById('osd'),
+      osdname=document.getElementById('osdname'),
+      nowch=document.getElementById('nowch'),
+      nowt=document.getElementById('nowt'),
+      slogans=document.getElementById('slogans'),
+      sloganEl=document.getElementById('slogan'),
+      merch=document.getElementById('merch');
+let osdTimer=null;
+
+function showOSD(ch){
+  osd.childNodes[0].textContent='CH 0'+ch.n+' ';
+  osdname.textContent=ch.name;
+  osd.classList.add('show');
+  clearTimeout(osdTimer);
+  osdTimer=setTimeout(()=>osd.classList.remove('show'),2600);
+}
+function cycleSlogans(){
+  clearInterval(sloganTimer);
+  let i=Math.floor(Math.random()*SLOGANS.length);
+  sloganEl.textContent=SLOGANS[i];
+  sloganTimer=setInterval(()=>{
+    i=(i+1)%SLOGANS.length; sloganEl.textContent=SLOGANS[i];
+  },2600);
+}
+function tune(idx,opts){
+  opts=opts||{};
+  current=(idx+CHANNELS.length)%CHANNELS.length;
+  const ch=CHANNELS[current];
+  if(!opts.instant) burstStatic(380);
+  // lanes
+  const isStatic=!!ch.static;
+  slogans.classList.toggle('show',isStatic);
+  merch.classList.toggle('show',!!ch.merch);
+  if(isStatic){ cycleSlogans(); startStaticLoop(); }
+  else { clearInterval(sloganTimer); stopStaticLoop(); }
+  // video
+  if(playerReady && player){
+    if(isStatic){ try{player.pauseVideo();}catch(e){} }
+    else { try{player.loadVideoById(ch.video);}catch(e){} }
+  }
+  // labels
+  showOSD(ch);
+  nowch.textContent='CH 0'+ch.n+' \u00B7 '+ch.name;
+  nowt.textContent=ch.title;
+  document.querySelectorAll('.chbtn').forEach((b,i)=>b.classList.toggle('on',i===current));
+  try{localStorage.setItem('ygaddie-ch',current);}catch(e){}
+}
+
+/* ================= CONTROLS ================= */
+const chrow=document.getElementById('chrow');
+CHANNELS.forEach((ch,i)=>{
+  const b=document.createElement('button');
+  b.className='chbtn'+(i===0?' on':''); b.innerHTML='CH 0'+ch.n+'<small>'+ch.name+'</small>';
+  b.onclick=()=>tune(i);
+  chrow.appendChild(b);
+});
+document.getElementById('chup').onclick=()=>tune(current+1);
+document.getElementById('chdown').onclick=()=>tune(current-1);
+document.addEventListener('keydown',e=>{
+  if(e.key>='1'&&e.key<='5') tune(+e.key-1);
+  else if(e.key==='ArrowRight'||e.key==='ArrowUp') tune(current+1);
+  else if(e.key==='ArrowLeft'||e.key==='ArrowDown') tune(current-1);
+  else if(e.key==='m'||e.key==='M') toggleMute();
+});
+// swipe
+let tx0=null;
+screen.addEventListener('touchstart',e=>{tx0=e.touches[0].clientX;},{passive:true});
+screen.addEventListener('touchend',e=>{
+  if(tx0===null)return;
+  const dx=e.changedTouches[0].clientX-tx0;
+  if(Math.abs(dx)>60) tune(current+(dx<0?1:-1));
+  tx0=null;
+},{passive:true});
+
+/* ================= UNMUTE ================= */
+const unmuteBtn=document.getElementById('unmute');
+function toggleMute(){
+  if(!playerReady||!player) return;
+  if(muted){ player.unMute(); player.setVolume(100); muted=false;
+    unmuteBtn.innerHTML='&#128266; MUTED? NAH'; }
+  else { player.mute(); muted=true;
+    unmuteBtn.innerHTML='&#128266; UNMUTE'; }
+}
+unmuteBtn.onclick=toggleMute;
+
+/* ================= THEMES ================= */
+const tbtns=document.querySelectorAll('[data-settheme]');
+function setTheme(name){
+  document.body.dataset.theme=name;
+  tbtns.forEach(b=>b.classList.toggle('on',b.dataset.settheme===name));
+  try{localStorage.setItem('ygaddie-theme',name);}catch(e){}
+  burstStatic(300); // resync zap
+}
+tbtns.forEach(b=>b.onclick=()=>setTheme(b.dataset.settheme));
+try{
+  const saved=localStorage.getItem('ygaddie-theme');
+  if(saved&&['crt','mtv','army'].includes(saved)) setTheme(saved);
+  const savedCh=parseInt(localStorage.getItem('ygaddie-ch')||'0',10);
+  if(savedCh>=0&&savedCh<CHANNELS.length) current=savedCh;
+}catch(e){}
+
+/* ================= VHS TRACKING GLITCH ================= */
+(function tracking(){
+  const wait=5000+Math.random()*9000;
+  setTimeout(()=>{
+    screen.classList.add('tracking');
+    const band=document.getElementById('trackband');
+    band.style.top=(10+Math.random()*70)+'%';
+    setTimeout(()=>screen.classList.remove('tracking'),750);
+    tracking();
+  },wait);
+})();
+// knob wiggle = fine tune zap
+document.getElementById('knobTune').onclick=()=>{burstStatic(500);};
+document.getElementById('knobVol').onclick=()=>toggleMute();
+</script>
+</body>
+</html>
