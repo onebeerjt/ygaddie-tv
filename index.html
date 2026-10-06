@@ -215,24 +215,29 @@ body[data-shell="toxic"]{
 @keyframes hintpulse{50%{transform:translateX(-50%) scale(1.06)}}
 /* ============ LINK MENU — tile grid ============ */
 #linkmenu{position:absolute;inset:0;z-index:15;background:#0a0a0f;display:none;
-  flex-direction:column;justify-content:center;padding:8% 9%;gap:10px}
+  flex-direction:column;justify-content:flex-start;padding:7% 7% 5%;gap:8px;overflow:hidden}
 #linkmenu.show{display:flex}
 #linkmenu .lmhead{font-family:var(--body-font);font-size:10px;letter-spacing:.3em;
-  color:var(--accent);margin-bottom:2px}
-#linkmenu .tilegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.tile{position:relative;border:1px solid rgba(255,255,255,.12);border-radius:10px;
+  color:var(--accent);margin-bottom:2px;flex:0 0 auto}
+#linkmenu .tilegrid{flex:1 1 auto;min-height:0;overflow-y:auto;align-content:start;
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-bottom:60px}
+.tile{position:relative;min-width:0;overflow:hidden;border:1px solid rgba(255,255,255,.12);border-radius:10px;
   background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.01));
   padding:14px 8px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;
   cursor:pointer;transition:transform .12s ease,border-color .12s,box-shadow .12s}
 .tile svg{width:30px;height:30px;stroke:var(--accent);fill:none;stroke-width:1.7;
   stroke-linecap:round;stroke-linejoin:round}
-.tile .tname{font-family:var(--head-font);font-size:12px;letter-spacing:.08em;color:#ddd}
-.tile .tsub{font-family:var(--body-font);font-size:8px;letter-spacing:.14em;color:rgba(255,255,255,.5)}
+.tile .tname{font-family:var(--head-font);font-size:12px;letter-spacing:.08em;color:#ddd;text-align:center}
+.tile .tsub{font-family:var(--body-font);font-size:8px;letter-spacing:.14em;color:rgba(255,255,255,.5);
+  text-align:center;overflow-wrap:anywhere;word-break:break-word}
 .tile.sel{border-color:var(--accent);box-shadow:var(--glow);transform:translateY(-3px) scale(1.03)}
 .tile.sel .tname{color:#fff}
 .tile:active{transform:translateY(-3px) scale(1.04)}
 #linkmenu .lmfoot{font-family:var(--body-font);font-size:9px;letter-spacing:.24em;
-  color:rgba(255,255,255,.45);text-align:center;margin-top:4px}
+  color:rgba(255,255,255,.45);text-align:center;margin-top:4px;flex:0 0 auto}
+/* when the links menu is open, drop the unmute pill to the very bottom
+   so it never sits on top of the tiles */
+#linkmenu.show ~ #soundhint{bottom:4%}
 /* ============ MUSIC HUB ============ */
 #music{position:absolute;inset:0;z-index:35;background:#0a0a0f;display:none;
   flex-direction:column;padding:9% 8%;overflow:hidden}
@@ -308,7 +313,7 @@ body[data-shell="toxic"]{
   font-family:var(--head-font);font-size:clamp(19px,5.4vw,28px);letter-spacing:.1em;
   color:var(--ink);text-shadow:0 1px 0 rgba(0,0,0,.35)}
 /* ============ CONTROLS ============ */
-#controls{flex:0 0 auto;display:grid;grid-template-columns:1fr auto 1fr;
+#controls{flex:0 0 auto;position:relative;z-index:3;display:grid;grid-template-columns:1fr auto 1fr;
   align-items:center;gap:4px;margin-top:10px;padding:0 6px}
 /* --- D-PAD: beveled cross, pivot hub, socket shadow --- */
 #dpad{position:relative;width:27cqw;height:27cqw;margin:0 auto;
@@ -355,8 +360,8 @@ body[data-shell="toxic"]{
   box-shadow:0 6px 0 rgba(0,0,0,.5),
              inset 0 2px 3px rgba(255,255,255,.5),
              inset 0 -4px 6px rgba(0,0,0,.35);
-  color:var(--btn-ink,#fff);font-family:var(--head-font);font-size:5.2cqw;
-  display:flex;align-items:center;justify-content:center;
+  color:var(--btn-ink,#fff);font-family:var(--head-font);font-size:4.6cqw;line-height:1.15;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
   text-shadow:0 1px 3px rgba(0,0,0,.55);
   transition:transform .08s cubic-bezier(.3,2.2,.5,1), box-shadow .08s, filter .08s}
 .abtn.pressed{transform:translateY(5px) scale(.97);
@@ -364,12 +369,12 @@ body[data-shell="toxic"]{
              inset 0 3px 6px rgba(0,0,0,.45),
              inset 0 -1px 2px rgba(255,255,255,.2);
   filter:brightness(.9)}
-.abtn small{position:absolute;bottom:-17px;left:0;right:0;text-align:center;
-  font-family:var(--body-font);font-size:7px;letter-spacing:.16em;color:var(--ink-dim)}
+.abtn small{font-family:var(--body-font);font-size:1.8cqw;letter-spacing:.18em;
+  color:var(--ink-dim);text-shadow:none;line-height:1}
 #a-x{left:0;top:30.3%}#a-y{left:30.3%;top:0}#a-a{right:0;top:30.3%}#a-b{left:30.3%;bottom:0}
 /* speaker grille: recessed dots */
-#speaker{position:absolute;right:20px;bottom:calc(16px + env(safe-area-inset-bottom));
-  width:92px;height:58px;opacity:.85;transform:rotate(-24deg);
+#speaker{position:absolute;right:12px;bottom:calc(8px + env(safe-area-inset-bottom));
+  width:80px;height:50px;opacity:.85;transform:rotate(-24deg);
   background-image:radial-gradient(circle at 50% 40%, #060609 3.2px, rgba(255,255,255,.10) 3.8px, transparent 4.4px);
   background-size:14.5px 14.5px;
   filter:drop-shadow(0 1px 0 rgba(255,255,255,.08))}
@@ -394,8 +399,9 @@ body[data-shell="toxic"]{
   font-family:var(--body-font);font-size:15px;font-weight:700;cursor:pointer;
   display:flex;align-items:center;justify-content:center;padding:0}
 #helpov{position:absolute;inset:0;z-index:40;background:rgba(5,5,10,.96);display:none;
-  flex-direction:column;justify-content:center;padding:9% 10%;overflow:auto}
+  flex-direction:column;justify-content:flex-start;padding:9% 10%;overflow:auto}
 #helpov.show{display:flex}
+#helpov .hwrap{margin:auto 0;width:100%}
 #helpov h3{font-family:var(--head-font);color:#fff;font-size:21px;letter-spacing:.08em;margin-bottom:12px}
 #helpov .hrow{display:flex;justify-content:space-between;align-items:center;gap:12px;
   padding:8px 2px;border-bottom:1px solid rgba(255,255,255,.09);
@@ -405,9 +411,14 @@ body[data-shell="toxic"]{
   text-align:center;font-family:var(--body-font)}
 /* ============ START MENU ============ */
 #menu{position:absolute;inset:0;z-index:35;background:#0a0a0f;display:none;
-  flex-direction:column;justify-content:center;padding:8% 9%;gap:4px;overflow:auto}
+  flex-direction:column;justify-content:flex-start;padding:7% 8% 5%;gap:4px;overflow:hidden}
 #menu.show{display:flex}
-#menu .mhead{font-family:var(--body-font);font-size:10px;letter-spacing:.3em;color:var(--accent);margin-bottom:10px}
+#menu .mhead{font-family:var(--body-font);font-size:10px;letter-spacing:.3em;color:var(--accent);
+  margin-bottom:10px;flex:0 0 auto}
+#menu .mbody{flex:1 1 auto;min-height:0;overflow-y:auto;display:flex;flex-direction:column;
+  gap:4px;padding-bottom:56px}
+#menu .mfoot{flex:0 0 auto;font-family:var(--body-font);font-size:9px;letter-spacing:.24em;
+  color:rgba(255,255,255,.45);text-align:center;margin-top:8px}
 #menu .mitem{font-family:var(--head-font);font-size:clamp(17px,4.6vw,26px);color:#c9c9c9;
   padding:11px 12px;border:1px solid transparent;border-radius:6px;letter-spacing:.04em}
 #menu .mitem.sel{color:#fff;background:rgba(255,255,255,.09);border-color:var(--accent);box-shadow:var(--glow)}
@@ -446,6 +457,7 @@ body[data-shell="toxic"]{
         <div id="glass"></div>
         <button id="helpbtn" aria-label="How to use">?</button>
         <div id="helpov" role="dialog" aria-label="Controls help">
+          <div class="hwrap">
           <h3>HOW TO PLAY</h3>
           <div class="hrow"><b>&#9664; &#9654;</b><span>Previous / next video</span></div>
           <div class="hrow"><b>&#9650; &#9660;</b><span>Swap cartridge</span></div>
@@ -456,6 +468,7 @@ body[data-shell="toxic"]{
           <div class="hrow"><b>START</b><span>Menu · videos / music / links</span></div>
           <div class="hrow"><b>SELECT</b><span>Shell color</span></div>
           <div class="hclose">B OR TAP OUTSIDE TO CLOSE</div>
+          </div>
         </div>
         <div id="menu"></div>
         <div id="music"></div>
@@ -669,6 +682,8 @@ function tune(instant){
   document.getElementById('a-a').classList.remove('ended');
   const c=CARTS[cart], isLinks=(cart===2);
   linkmenu.classList.toggle('show',isLinks);
+  /* the now-bar would double up with the links menu's own heading + hints */
+  document.getElementById('nowbar').style.display=isLinks?'none':'';
   if(isLinks) renderLinks();
   const apply=()=>{
     loadCurrent();
@@ -688,7 +703,6 @@ function tune(instant){
   nowch.textContent=cartLabel()+' · '+c.name;
   if(isLinks){ nowt.textContent='PICK A LINK'; nows.textContent='D-PAD MOVES · A OPENS'; }
   else{ nowt.textContent=c.items[item].title; nows.textContent=c.items[item].sub; }
-  try{localStorage.setItem('ygaddie-cart',cart+':'+item);}catch(e){}
   try{if(navigator.vibrate) navigator.vibrate(12);}catch(e){}
 }
 function nextItem(d){
@@ -839,8 +853,9 @@ try{
   const s=localStorage.getItem('ygaddie-shell');
   if(s&&SHELLS.some(x=>x.id===s)){ document.body.dataset.shell=s;
     shelltag.textContent=SHELLS.find(x=>x.id===s).label; }
-  const sc=localStorage.getItem('ygaddie-cart');
-  if(sc){ const p=sc.split(':'); cart=+p[0]||0; item=+p[1]||0; }
+  /* ALWAYS boot into the headliner music video — never restore a menu view.
+     Only the shell color persists; the view always starts at video playback. */
+  cart=0; item=0; linkSel=0;
   if(localStorage.getItem('ygaddie-power')==='1'){
     power=true; gb.classList.add('on'); boot.classList.add('hide');
   }
@@ -855,16 +870,17 @@ function renderMenu(){
   let h;
   if(menu.level===0){
     const subs=[CARTS[0].items.length+' VIDEOS','ALL SO SIMPLE · 15 TRACKS',CARTS[2].links.length+' LINKS'];
-    h='<div class="mhead">START · MENU</div>'+
+    h='<div class="mhead">START · MENU</div><div class="mbody">'+
       ['VIDEOS','MUSIC','LINKS'].map((t,i)=>
         '<div class="mitem'+(i===menu.tab?' sel':'')+'" style="--i:'+i+'">'+t+
         '<span class="msub">'+subs[i]+'</span></div>').join('')+
-      '<div class="mhead" style="margin-top:12px">A SELECTS · B BACKS OUT</div>';
+      '</div><div class="mfoot">A SELECTS · B BACKS OUT</div>';
   }else{
-    h='<div class="mhead">VIDEOS — PICK ONE</div>'+
+    h='<div class="mhead">VIDEOS — PICK ONE</div><div class="mbody">'+
       CARTS[0].items.map((v,i)=>
         '<div class="mitem'+(i===menu.item?' sel':'')+'" style="--i:'+i+'">'+v.title+
-        '<span class="msub">'+v.sub+'</span></div>').join('');
+        '<span class="msub">'+v.sub+'</span></div>').join('')+
+      '</div><div class="mfoot">A PLAYS · B BACK</div>';
   }
   menuEl.innerHTML=h;
   const sel=menuEl.querySelector('.mitem.sel');
