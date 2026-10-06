@@ -246,20 +246,26 @@ body[data-shell="toxic"]{
   color:var(--accent);margin-bottom:10px;flex:0 0 auto}
 #music .mnote-ic{width:15px;height:15px;stroke:var(--accent);fill:none;stroke-width:2;
   vertical-align:-2px;margin-right:6px}
-/* shelf: album tiles */
-#music .shelf{display:grid;grid-template-columns:1fr 1fr;gap:12px;overflow:auto;padding-bottom:6px}
-.album-tile{border:1px solid rgba(255,255,255,.12);border-radius:10px;overflow:hidden;
-  background:#111;cursor:pointer;transition:transform .14s cubic-bezier(.3,1.6,.5,1),box-shadow .14s,border-color .14s}
+/* shelf: artwork-only tape tiles, vertical scroll */
+#music .shelf{display:flex;flex-direction:column;align-items:center;gap:18px;
+  overflow-y:auto;overflow-x:hidden;flex:1 1 auto;min-height:0;padding:8px 4px 16px}
+.album-tile{width:min(64%,232px);flex:0 0 auto;cursor:pointer;
+  transition:transform .16s cubic-bezier(.3,1.6,.5,1),box-shadow .16s,border-color .16s}
+.album-tile .covwrap{position:relative;border-radius:10px;overflow:hidden;
+  border:1px solid rgba(255,255,255,.14);box-shadow:0 8px 22px rgba(0,0,0,.55);
+  transition:border-color .16s,box-shadow .16s}
 .album-tile .cover{aspect-ratio:1/1;width:100%;object-fit:cover;display:block;background:#1a1a22}
 .album-tile .cover-fb{aspect-ratio:1/1;width:100%;display:flex;align-items:center;justify-content:center;
   background:linear-gradient(135deg,#2a1a4a,#0e2a3a);font-family:var(--head-font);
   font-size:22px;color:#fff;letter-spacing:.06em;text-align:center;padding:10px}
-.album-tile .ainfo{padding:9px 10px}
-.album-tile .aname{font-family:var(--head-font);font-size:13px;color:#eee;letter-spacing:.05em}
-.album-tile .ameta{font-family:var(--body-font);font-size:8.5px;letter-spacing:.14em;
-  color:rgba(255,255,255,.55);margin-top:3px}
-.album-tile.sel{border-color:var(--accent);box-shadow:var(--glow);transform:translateY(-4px) scale(1.03)}
-.album-tile:active{transform:translateY(-4px) scale(1.04)}
+.album-tile .ainfo{padding:9px 4px 0;text-align:center}
+.album-tile .aname{font-family:var(--head-font);font-size:12px;color:#eee;letter-spacing:.05em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.album-tile .ameta{font-family:var(--body-font);font-size:8.5px;letter-spacing:.2em;
+  color:rgba(255,255,255,.5);margin-top:4px}
+.album-tile.sel{transform:scale(1.05)}
+.album-tile.sel .covwrap{border-color:var(--accent);box-shadow:var(--glow),0 8px 22px rgba(0,0,0,.55)}
+.album-tile:active{transform:scale(1.06)}
 /* tracklist */
 #music .thead{display:flex;gap:10px;align-items:center;margin-bottom:10px;flex:0 0 auto}
 #music .thead .covwrap{position:relative;width:46px;height:46px;flex:0 0 auto;
@@ -559,7 +565,8 @@ const CARTS = [
    ALL SO SIMPLE — A$AP ANT & LORD FUBU, Marino Infantry Records, May 2026.
    Tracklist + durations verified via Deezer (19-05-2026). Cover art is the
    real tape artwork. Per-track video IDs only where a video is verified. */
-const ALBUMS=[{
+const ALBUMS=[
+{
   title:'ALL SO SIMPLE', artist:'A$AP ANT & LORD FUBU', year:'2026',
   meta:'15 TRACKS · PROD. LORD FUBU',
   cover:'https://respecta.is/uploads/posts/2026-05/thumbs/1779206391_asapant-ass.jpg',
@@ -581,7 +588,256 @@ const ALBUMS=[{
     {t:'JUICE STAINS FT. SODUH & LULU P',d:'2:31'},
     {t:'LINE COMING THRU DA $ FT. BABY 9ENO & SODUH',d:'2:57'},
   ]
-}];
+},
+{
+  title:'ENTER THE INFANTRY, VOL. 2', artist:'MARINO INFANTRY', year:'2025',
+  meta:'25 TRACKS · COMPILATION',
+  cover:'https://cdn-images.dzcdn.net/images/cover/422cd90d6d5ade28d1f241439199a79c/500x500-000000-80-0-0.jpg',
+  stream:'https://www.deezer.com/album/242203172',
+  tracks:[
+    {t:'NEW AGE OUTLAWS FT. A$AP ANT & BABY 9ENO',d:'1:52'},
+    {t:'ONE MORE CHANCE FT. A$AP ANT, BABY 9ENO, LULU P & SODUH',d:'2:18'},
+    {t:'INCEPTION FT. A$AP ANT, SODUH & LULU P',d:'1:46'},
+    {t:'MEGA MAN X FT. A$AP ANT, LULU P & SODUH',d:'2:12'},
+    {t:'MARINO WORLD FT. A$AP ANT, LULU P & SODUH',d:'1:44'},
+    {t:'STANDING OVATION FT. A$AP ANT, LIL 2 DOW, SODUH & LULU P',d:'2:17'},
+    {t:'FUTURISTIC DIAMONDS FT. A$AP ANT & BABY 9ENO',d:'2:45'},
+    {t:'SLAP $HOT FT. A$AP ANT, SODUH & OG DON 999',d:'2:11'},
+    {t:'BIG BAMBU FT. A$AP ANT & LULU P',d:'1:50'},
+    {t:'MS. DAISY FT. A$AP ANT & SODUH',d:'2:35'},
+    {t:'FLEETWOOD INTERLUDE FT. A$AP ANT & LULU P',d:'1:41'},
+    {t:'PGA TOUR 2000 FT. A$AP ANT & LULU P',d:'1:36'},
+    {t:'BRING DA OOZE FT. A$AP ANT & TAEDAWG',d:'1:54'},
+    {t:'98\' SHOOTOUT FT. A$AP ANT & A$AP TWELVYY',d:'2:04'},
+    {t:'ALBERT WESKER FT. A$AP ANT & SODUH',d:'2:16'},
+    {t:'REPO MEN FT. A$AP ANT & CHAVO',d:'2:51'},
+    {t:'FANTASTIC 4 FT. A$AP ANT, SODUH, LULU P & A$AP TWELVYY',d:'2:05'},
+    {t:'RANDY MOSS FT. A$AP ANT & K$UPREME',d:'2:14'},
+    {t:'KEEP SCORIN\' FT. A$AP ANT, LULU P & LIL 2 DOW',d:'1:40'},
+    {t:'PIERCE-ALLEN-GARNETT FT. A$AP ANT, LULU P & SODUH',d:'2:42'},
+    {t:'RED WOLF PACK FT. A$AP ANT, LIL 2 DOW & LULU P',d:'4:22'},
+    {t:'MARINO CHICAGO FT. A$AP ANT, OG DON 999 & SODUH',d:'2:13'},
+    {t:'X\'EM REMOTE CONTROL EM FT. A$AP ANT & SODUH',d:'1:56'},
+    {t:'MR. FEENY FT. A$AP ANT & LULU P',d:'1:42'},
+    {t:'HOP OFF FT. A$AP ANT & BABY 9ENO',d:'2:28'},
+  ]
+},
+{
+  title:'ADDIE PITINO 2', artist:'A$AP ANT', year:'2025',
+  meta:'17 TRACKS',
+  cover:'https://cdn-images.dzcdn.net/images/cover/bf784dd01c8c94ee2797c867681d622d/500x500-000000-80-0-0.jpg',
+  stream:'https://www.deezer.com/album/740210411',
+  tracks:[
+    {t:'DON CARLO (OFF THE GRID',d:'2:53'},
+    {t:'WILLIAM H HOLLA',d:'1:48'},
+    {t:'WHICH 1 OF THESE H0ES TODAY?',d:'2:02'},
+    {t:'DRUMLINE FREESTYLE',d:'2:04',video:'GtiSl5fcdI8'},
+    {t:'STARBURY',d:'2:44'},
+    {t:'ONLY TRUST ME',d:'2:14'},
+    {t:'MR & MRS SMITH',d:'2:31'},
+    {t:'ARM IN THE RIM',d:'2:32'},
+    {t:'ROPA DOPE',d:'3:12'},
+    {t:'4TH QUARTER',d:'2:11'},
+    {t:'YOUNG SHAKA SPEAKS PT. 2',d:'0:23'},
+    {t:'HUSTLER OR SCAMMER',d:'1:44'},
+    {t:'SUICIDE BOMBER',d:'1:45'},
+    {t:'FRIDAY SERVICE',d:'1:37'},
+    {t:'2025 FUCK EM',d:'3:45'},
+    {t:'COUNT PICCOLO',d:'2:30'},
+    {t:'FEMA',d:'2:03'},
+  ]
+},
+{
+  title:'LIL BLACK JEAN JACKET 3', artist:'A$AP ANT', year:'2022',
+  meta:'16 TRACKS',
+  cover:'https://cdn-images.dzcdn.net/images/cover/efab97706ff379593fedb3cdeb606cf5/500x500-000000-80-0-0.jpg',
+  stream:'https://www.deezer.com/album/310208837',
+  tracks:[
+    {t:'BOSS DECISIONS',d:'1:53'},
+    {t:'THE GOD HOUR',d:'2:36'},
+    {t:'WWE NO MERCY FT. SODUH',d:'2:04'},
+    {t:'HIGH DEFINITION 3D',d:'3:59'},
+    {t:'DEVIL MAY CRY',d:'2:28'},
+    {t:'ROTHSCHILD FAMILY FT. LIL 2 DOW, LULU P',d:'2:06'},
+    {t:'PUDGE RODRIGUEZ',d:'2:04'},
+    {t:'3AM IN NEW ORLEANS',d:'2:14'},
+    {t:'SPIZZLE GO CRAZY FREESTYLE',d:'2:17'},
+    {t:'CHÁVEZ VS WHITAKER',d:'2:57'},
+    {t:'FLY AWAY',d:'3:13'},
+    {t:'THUGGIN IMMORTAL FT. LIL 2 DOW, A$AP TWELVYY',d:'3:47'},
+    {t:'POP ROCK$ FT. KEY!',d:'2:15'},
+    {t:'GAME SHARK FT. SODUH',d:'1:47'},
+    {t:'NUDES',d:'3:07'},
+    {t:'CARTIER AMG FT. G.T. (REMIX',d:'3:14'},
+  ]
+},
+{
+  title:'LIL BLACK JEAN JACKET 2 (RUBY EDITION)', artist:'A$AP ANT', year:'2020',
+  meta:'17 TRACKS',
+  cover:'https://cdn-images.dzcdn.net/images/cover/902bc5e40d3c005f25cb849b39dc05f6/500x500-000000-80-0-0.jpg',
+  stream:'https://www.deezer.com/album/262714962',
+  tracks:[
+    {t:'MAX CONTRACT',d:'2:01'},
+    {t:'ON MY WAY TO JUMMAH FT. LULU P',d:'2:01'},
+    {t:'TELL MY GIRL COUNT IT',d:'2:02'},
+    {t:'WISH I COULD TIME TRAVEL FT. A$AP TWELVYY',d:'2:16'},
+    {t:'DIOR SUIT BUSINESS',d:'2:12'},
+    {t:'CARTIER AMG',d:'2:41'},
+    {t:'YELLOW DRAGON FRUIT FT. ZOMBIE JUICE',d:'2:30'},
+    {t:'BOB ROSS FT. LULU P, A$AP TWELVYY',d:'2:40'},
+    {t:'SUPER BOWL HALFTIME',d:'2:15'},
+    {t:'TEKKEN TAG FT. SODUH',d:'1:54'},
+    {t:'TALES FROM THE CRYPT',d:'2:15'},
+    {t:'5 TIMES A DAY FT. GOONEW',d:'2:09'},
+    {t:'VVS PHARMACY',d:'2:14'},
+    {t:'WOCKANDA 8000 FT. LULU P',d:'2:36'},
+    {t:'PETE ROSE',d:'1:51'},
+    {t:'SUNDAY NIGHT LIGHTS FT. BABY 9ENO',d:'2:06'},
+    {t:'MARINO PARIS FT. JMK$',d:'1:57'},
+  ]
+},
+{
+  title:'I AM UNDERGROUND', artist:'A$AP ANT', year:'2020',
+  meta:'7 TRACKS · EP',
+  cover:'https://cdn-images.dzcdn.net/images/cover/65fde3702a4bfb5168bb50ca0ac2346b/500x500-000000-80-0-0.jpg',
+  stream:'https://www.deezer.com/album/262704932',
+  tracks:[
+    {t:'BUSSIN\' SCRIPTS',d:'3:36'},
+    {t:'CHRIS REDFIELD',d:'2:31'},
+    {t:'ALLAH WEARS PRADA FT. GOONEW',d:'2:05'},
+    {t:'MARINO THRAXX FT. LULU P, LIL 2DOW',d:'2:15'},
+    {t:'SYRACUSE ORANGE MELO',d:'2:12'},
+    {t:'CRUNCHY BLACK FLOW',d:'1:40'},
+    {t:'BARRY SANDERS SPIN OUTRO FT. SODUH',d:'2:16'},
+  ]
+},
+{
+  title:'ENTER THE INFANTRY', artist:'MARINO INFANTRY', year:'2019',
+  meta:'25 TRACKS · COMPILATION',
+  cover:'https://cdn-images.dzcdn.net/images/cover/b57a06cc401d16f6abf50db7ac620e2b/500x500-000000-80-0-0.jpg',
+  stream:'https://www.deezer.com/album/122801862',
+  tracks:[
+    {t:'AUSTIN POWERS',d:'2:22'},
+    {t:'SR LOWS FT. A$AP ANT, LULU P & SODUH',d:'1:44'},
+    {t:'PULL OFF GENTLE FT. A$AP ANT, A$AP TWELVYY & SODUH',d:'2:18'},
+    {t:'ROGER CLEMONS (A$AP ANT, LULU P & BABY 9ENO',d:'2:31'},
+    {t:'ESSENTIA FT. A$AP ANT & A$AP TWELVYY',d:'2:35'},
+    {t:'SILLY RABBIT FT. A$AP ANT & LULU P',d:'2:14'},
+    {t:'WRESTLE MANIA FT. A$AP ANT & LULU P',d:'1:36'},
+    {t:'5 HOES IN A TAHOE FT. A$AP ANT, LULU P & MONEY MONTANA',d:'2:56'},
+    {t:'VIBRAINIUM FT. A$AP ANT & SODUH',d:'2:34'},
+    {t:'DOUBLE ZERO SEVEN FT. A$AP ANT & LULU P',d:'1:38'},
+    {t:'KISS OF DEATH FT. A$AP ANT, LULU P & BENJI BLUE',d:'2:13'},
+    {t:'RUSH HOUR FT. A$AP ANT & LULU P',d:'2:11'},
+    {t:'GODD BURGER FT. A$AP ANT & SODUH',d:'1:20'},
+    {t:'RAY RAY FT. A$AP ANT, LULU P & LIL 2 DOW',d:'1:29'},
+    {t:'SHMACK HARV FREESTYLE FT. A$AP ANT & LULU P',d:'1:43'},
+    {t:'WHITE STICKS FT. A$AP ANT & LULU P',d:'2:22'},
+    {t:'2X WEAR FT. A$AP ANT & LULU P',d:'2:06'},
+    {t:'CASH APP FT. A$AP ANT & BABY 9ENO',d:'1:51'},
+    {t:'RAISE THE RIFLE FT. A$AP ANT & LULU P',d:'2:06'},
+    {t:'BEN FRANK FT. A$AP ANT, LULU P & BABY 9ENO',d:'1:33'},
+    {t:'HAMMER TIME FT. A$AP ANT, LULU P & BABY 9ENO',d:'2:22'},
+    {t:'APOCALYPSE VS. THANOS FT. A$AP ANT, LULU P & BABY 9ENO',d:'2:00'},
+    {t:'SCORE IT FT. A$AP ANT, LULU P & BABY 9ENO',d:'1:43'},
+    {t:'HASTA LA VISTA FT. A$AP ANT & LULU P',d:'2:06'},
+    {t:'CANDY MUSCLE FT. A$AP ANT & LULU P',d:'2:03'},
+  ]
+},
+{
+  title:'ADDIE IZZO', artist:'A$AP ANT', year:'2019',
+  meta:'5 TRACKS · EP',
+  cover:'https://cdn-images.dzcdn.net/images/cover/ed513736d7ed4908c1dc546ef4c6b6fe/500x500-000000-80-0-0.jpg',
+  stream:'https://www.deezer.com/album/262700262',
+  tracks:[
+    {t:'DOG DAY AFTERNOON',d:'2:51'},
+    {t:'HELL OR HIGH WATER FT. BABY 9ENO, LIL 2DOW, LULU P',d:'1:37'},
+    {t:'SPACE BAR DELETE',d:'1:10'},
+    {t:'FUBU GOT THAT FLAME 9000 FT. SODUH',d:'1:38'},
+    {t:'DOUBLE DOSAGE FT. RUDY CASH',d:'1:46'},
+  ]
+},
+{
+  title:'ADDIE PITINO', artist:'A$AP ANT', year:'2019',
+  meta:'11 TRACKS',
+  cover:'https://cdn-images.dzcdn.net/images/cover/9db805066bfe538dbbd720706a25d687/500x500-000000-80-0-0.jpg',
+  stream:'https://www.deezer.com/album/262708582',
+  tracks:[
+    {t:'NO CLOUT CHASIN FT. LULU P',d:'2:16'},
+    {t:'WOCKKANDA FT. LULU P',d:'2:38',video:'Uz_qs0ZoUGc'},
+    {t:'WCW MAYHEM FT. BABY 9ENO',d:'2:07'},
+    {t:'GLOBAL DISTORTION',d:'2:04'},
+    {t:'VANILLA CREAM SODA',d:'2:10'},
+    {t:'TROPICAL RAINSTORM FT. LIL 2DOW',d:'2:09'},
+    {t:'GLAMOUR',d:'1:51'},
+    {t:'PURGE BUTTON FT. LULU P',d:'3:08'},
+    {t:'DIJON MUSTARD FT. BENJI BLUE',d:'2:05'},
+    {t:'BOBBY BROWN FREESTYLE',d:'2:05'},
+    {t:'SET THE TONE (OUTRO',d:'1:38'},
+  ]
+},
+{
+  title:'THE INTERLUDE', artist:'A$AP ANT', year:'2018',
+  meta:'17 TRACKS',
+  cover:'https://cdn-images.dzcdn.net/images/cover/c04e112a224459743639314f7004feb8/500x500-000000-80-0-0.jpg',
+  stream:'https://www.deezer.com/album/262714982',
+  tracks:[
+    {t:'SHAKA JAILCALL',d:'1:28'},
+    {t:'SELF CONSCIENCE',d:'3:12'},
+    {t:'WHITE VS. GREEN RANGER',d:'2:17'},
+    {t:'QUANTUM PHYSICS',d:'2:13'},
+    {t:'NOT A STAIN ON IT FT. LULU P, BABY 9ENO',d:'2:15'},
+    {t:'MARIO $UNSHINE FT. LULU P, COLDGAME SLAYTER',d:'1:53',video:'5ElxcX3Oth4'},
+    {t:'BRI BRI KEEP THAT STRAP FT. NBDYS100',d:'2:09'},
+    {t:'BILLZ RAW SPEAKS',d:'1:23'},
+    {t:'THE INFANTRY FT. SODUH, BENJI BLUE, LULU P',d:'2:27'},
+    {t:'KIWI STRAWBERRY FT. HOODRICH PABLO JUAN',d:'2:36'},
+    {t:'MAC N CHEESE 6 FT. GABBY',d:'1:48'},
+    {t:'SIMPLE MATHEMATICS (FOCUS FT. SODUH',d:'1:48'},
+    {t:'PUT A 50 ON IT FT. BENJI BLUE, LULU P, DUFFLEBAG BOOG',d:'2:36'},
+    {t:'LIL 2DOW INTERMISSION',d:'1:56'},
+    {t:'GOLDEN AXES',d:'2:00'},
+    {t:'MEWTOW FREESTYLE',d:'2:09'},
+    {t:'SEAN TAYLOR FT. MONEYMARR, BABY 9ENO',d:'1:49'},
+  ]
+},
+{
+  title:'LIL BLACK JEAN JACKET', artist:'A$AP ANT', year:'2018',
+  meta:'13 TRACKS',
+  cover:'https://cdn-images.dzcdn.net/images/cover/51265c9778701186b82218ea7cf03778/500x500-000000-80-0-0.jpg',
+  stream:'https://www.deezer.com/album/262708642',
+  tracks:[
+    {t:'LUCKY CHARMS',d:'1:09'},
+    {t:'#FREESHAKA INTRO FT. YOUNG SHAKA',d:'0:16'},
+    {t:'DIAMOND DUST REMIX FT. HOODRICH PABLO JUAN',d:'2:47'},
+    {t:'RED CREAM SODA',d:'2:02',video:'7Bwn_nW-w6g'},
+    {t:'WHITE BUFFS FT. BIG JUNO',d:'2:31'},
+    {t:'GREEN SMOOTHIE',d:'2:11'},
+    {t:'WHO GOT IT FT. SODUH',d:'1:51'},
+    {t:'BAKE A CAKE',d:'2:20'},
+    {t:'3NINJA$ FT. JBAN$2TURNT, K$UPREME',d:'1:38'},
+    {t:'PISTOLS IN THE PARTY',d:'2:54'},
+    {t:'SOUL REAVER FT. A$AP TWELVYY',d:'2:49'},
+    {t:'SHAY SHAY FT. BENJI BLUE, LULU P',d:'2:18'},
+    {t:'BOLT FT. SODUH',d:'2:03'},
+  ]
+},
+{
+  title:'THE PRELUDE', artist:'A$AP ANT', year:'2018',
+  meta:'7 TRACKS · EP',
+  cover:'https://cdn-images.dzcdn.net/images/cover/2858b760abbbb7f3e860831086520d20/500x500-000000-80-0-0.jpg',
+  stream:'https://www.deezer.com/album/262699112',
+  tracks:[
+    {t:'ACNE JEANS FT. LULU',d:'2:18',video:'u-ZYIsD0tIM'},
+    {t:'BRAIN DEAD',d:'1:52'},
+    {t:'DIAMOND DUST',d:'2:00',video:'TK_K8gLbFqg'},
+    {t:'GUCCI SOX FT. BILLZ RAW',d:'1:59',video:'tQWiOd9ly9c'},
+    {t:'CLOUD BURST FT. SODUH',d:'2:57'},
+    {t:'BLUE CREAM SODA',d:'2:09'},
+    {t:'HEAT DRAWN FT. BENJI BLUE',d:'1:52'},
+  ]
+},
+];
 /* inline SVG glyphs — no emoji anywhere */
 const IC={
   note:'<svg viewBox="0 0 24 24"><path d="M9 17.5V6l10-2v11"/><circle cx="6.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="15" r="2.5"/></svg>',
@@ -869,7 +1125,7 @@ function closeMenu(){ menu=null; menuEl.classList.remove('show'); }
 function renderMenu(){
   let h;
   if(menu.level===0){
-    const subs=[CARTS[0].items.length+' VIDEOS','ALL SO SIMPLE · 15 TRACKS',CARTS[2].links.length+' LINKS'];
+    const subs=[CARTS[0].items.length+' VIDEOS',ALBUMS.length+' TAPES · '+ALBUMS.reduce((n,a)=>n+a.tracks.length,0)+' TRACKS',CARTS[2].links.length+' LINKS'];
     h='<div class="mhead">START · MENU</div><div class="mbody">'+
       ['VIDEOS','MUSIC','LINKS'].map((t,i)=>
         '<div class="mitem'+(i===menu.tab?' sel':'')+'" style="--i:'+i+'">'+t+
@@ -925,7 +1181,7 @@ function renderMusic(){
       ALBUMS.map((a,i)=>'<div class="album-tile'+(i===mus.album?' sel':'')+'" style="--i:'+i+'">'+
         coverBlock(a,'covwrap')+
         '<div class="ainfo"><div class="aname">'+a.title+'</div><div class="ameta">'+a.meta+'</div></div></div>').join('')+
-      '</div><div class="mfoot">A OPENS · B BACK</div>';
+      '</div><div class="mfoot">D-PAD TOGGLES · A OPENS · B BACK</div>';
   }else{
     const a=ALBUMS[mus.album];
     h='<div class="mhead">MUSIC · '+a.title+'</div>'+
@@ -1017,6 +1273,15 @@ document.addEventListener('keydown',e=>{
   else if(k==='enter') powerOn();
 });
 let tx0=null,ty0=null;
+let mx0=null,my0=null;
+/* swipe inside the music hub: vertical flick toggles tapes (level 0) */
+musicEl.addEventListener('touchstart',e=>{mx0=e.touches[0].clientX;my0=e.touches[0].clientY;},{passive:true});
+musicEl.addEventListener('touchend',e=>{
+  if(mx0===null||!mus||mus.level!==0) { mx0=null; my0=null; return; }
+  const dx=e.changedTouches[0].clientX-mx0, dy=e.changedTouches[0].clientY-my0;
+  if(Math.abs(dy)>52&&Math.abs(dy)>Math.abs(dx)*1.5) musicNav(dy<0?1:-1);
+  mx0=null; my0=null;
+},{passive:true});
 screen.addEventListener('touchstart',e=>{tx0=e.touches[0].clientX;ty0=e.touches[0].clientY;},{passive:true});
 screen.addEventListener('touchend',e=>{
   if(tx0===null||!power||cart===2||menu||mus||musPlaying) return;
