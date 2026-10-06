@@ -244,33 +244,26 @@ body[data-shell="toxic"]{
 #music.show{display:flex}
 #music .mhead{font-family:var(--body-font);font-size:10px;letter-spacing:.3em;
   color:var(--accent);margin-bottom:10px;flex:0 0 auto}
-#music .mnote-ic{width:15px;height:15px;stroke:var(--accent);fill:none;stroke-width:2;
-  vertical-align:-2px;margin-right:6px}
-/* shelf: artwork-only tape tiles, vertical scroll */
-#music .shelf{display:flex;flex-direction:column;align-items:center;gap:18px;
-  overflow-y:auto;overflow-x:hidden;flex:1 1 auto;min-height:0;padding:8px 4px 16px}
-.album-tile{width:min(64%,232px);flex:0 0 auto;cursor:pointer;
-  transition:transform .16s cubic-bezier(.3,1.6,.5,1),box-shadow .16s,border-color .16s}
-.album-tile .covwrap{position:relative;border-radius:10px;overflow:hidden;
-  border:1px solid rgba(255,255,255,.14);box-shadow:0 8px 22px rgba(0,0,0,.55);
-  transition:border-color .16s,box-shadow .16s}
-.album-tile .cover{aspect-ratio:1/1;width:100%;object-fit:cover;display:block;background:#1a1a22}
-.album-tile .cover-fb{aspect-ratio:1/1;width:100%;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,#2a1a4a,#0e2a3a)}
-.album-tile .cover-fb svg{width:36px;height:36px;stroke:rgba(255,255,255,.45);fill:none;
-  stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.album-tile.sel{transform:scale(1.05)}
-.album-tile.sel .covwrap{border-color:var(--accent);box-shadow:var(--glow),0 8px 22px rgba(0,0,0,.55)}
-.album-tile:active{transform:scale(1.06)}
+/* splash: the focused tape's artwork fills the whole screen full-bleed,
+   like the title screen of a game you just booted up */
+#music .splash{position:absolute;inset:0;z-index:0;overflow:hidden;background:#07070b;
+  animation:splashin .3s ease both}
+@keyframes splashin{from{opacity:0;transform:scale(1.03)}to{opacity:1;transform:none}}
+#music .splash .art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transform:scale(1.06);transition:opacity .26s ease,transform .26s ease}
+#music .splash .art.on{opacity:1;transform:scale(1)}
+#music .scrim{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(5,5,9,.62) 0%,rgba(5,5,9,.12) 26%,rgba(5,5,9,0) 55%,rgba(5,5,9,.78) 100%)}
+#music .mhead,#music .mfoot{position:relative;z-index:2}
+@media (prefers-reduced-motion:reduce){
+  #music .splash{animation:none}
+  #music .splash .art{transition:none}
+}
 /* tracklist */
 #music .thead{display:flex;gap:10px;align-items:center;margin-bottom:10px;flex:0 0 auto}
 #music .thead .covwrap{position:relative;width:46px;height:46px;flex:0 0 auto;
   border-radius:6px;overflow:hidden;background:#1a1a22}
 #music .thead .cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-#music .thead .cover-fb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,#2a1a4a,#0e2a3a)}
-#music .thead .cover-fb svg{width:18px;height:18px;stroke:rgba(255,255,255,.45);fill:none;
-  stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 #music .thead .tt{font-family:var(--head-font);font-size:15px;color:#fff;letter-spacing:.04em}
 #music .thead .ts{font-family:var(--body-font);font-size:8.5px;letter-spacing:.14em;
   color:rgba(255,255,255,.55);margin-top:2px}
@@ -292,7 +285,7 @@ body[data-shell="toxic"]{
   color:rgba(255,255,255,.45);text-align:center;margin-top:8px}
 #music .mfoot .mnow{font-family:var(--head-font);font-size:11px;letter-spacing:.08em;color:#fff;margin-bottom:5px}
 /* stagger cascade on every view render */
-#menu .mitem,#music .album-tile,#music .track,#linkmenu .tile{
+#menu .mitem,#music .track,#linkmenu .tile{
   animation:tilein .34s cubic-bezier(.2,1.2,.4,1) both;animation-delay:calc(var(--i,0)*45ms)}
 @keyframes tilein{from{opacity:0;transform:translateY(16px) scale(.95)}to{opacity:1;transform:none}}
 #music .mhead,#music .thead,#linkmenu .lmhead{animation:tilein .3s ease both}
@@ -847,7 +840,6 @@ const ALBUMS=[
 ];
 /* inline SVG glyphs — no emoji anywhere */
 const IC={
-  note:'<svg viewBox="0 0 24 24"><path d="M9 17.5V6l10-2v11"/><circle cx="6.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="15" r="2.5"/></svg>',
   play:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg>',
   cam:'<svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="3"/><circle cx="12" cy="13" r="4"/><circle cx="17.2" cy="10" r="1.2"/></svg>',
   bag:'<svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M8.5 10V6.5a3.5 3.5 0 0 1 7 0V10"/></svg>',
@@ -1229,19 +1221,28 @@ function menuBack(){
 const musicEl=document.getElementById('music');
 let mus=null;        /* null | {level:0,album} | {level:1,album,track} */
 let musPlaying=null; /* {a,t,video} while a track video owns the screen */
-function openMusic(){ mus={level:0,album:0}; renderMusic(); musicEl.classList.add('show'); click(1200); refreshButtons(); }
+function openMusic(){ mus={level:0,album:0}; splashTop=0;
+  /* preload all covers so tape swaps are instant from cache */
+  ALBUMS.forEach(a=>{const im=new Image();im.src=a.cover;});
+  renderMusic(); musicEl.classList.add('show'); click(1200); refreshButtons(); }
 function closeMusic(){ mus=null; musPlaying=null; musicEl.classList.remove('show'); refreshButtons(); }
 function coverBlock(a,wrapCls){
-  return '<div class="'+wrapCls+'"><div class="cover-fb">'+IC.note+'</div>'+
+  /* no placeholder icon anywhere: artwork or a solid dark tile */
+  return '<div class="'+wrapCls+'">'+
     '<img class="cover" src="'+a.cover+'" alt="" onerror="this.remove()"></div>';
 }
 function renderMusic(){
   let h;
   if(mus.level===0){
-    h='<div class="mhead">'+IC.note.replace('<svg','<svg class="mnote-ic"')+'MUSIC · PICK A TAPE</div><div class="shelf">'+
-      ALBUMS.map((a,i)=>'<div class="album-tile'+(i===mus.album?' sel':'')+'" style="--i:'+i+'">'+
-        coverBlock(a,'covwrap')+'</div>').join('')+
-      '</div><div class="mfoot"><div class="mnow">'+ALBUMS[mus.album].title+'</div>D-PAD TOGGLES · A OPENS · B BACK</div>';
+    /* fullscreen tape splash: the focused tape's artwork IS the screen,
+       full-bleed like a game boot screen. tape name lives only in .mnow. */
+    const sa=ALBUMS[mus.album];
+    splashTop=0; /* fresh markup always shows layer 0 */
+    h='<div class="splash"><img class="art on" src="'+sa.cover+'" alt="" onerror="this.remove()">'+
+      '<img class="art" alt="" onerror="this.remove()"></div>'+
+      '<div class="scrim"></div>'+
+      '<div class="mhead">MUSIC · PICK A TAPE</div>'+
+      '<div class="mfoot"><div class="mnow">'+sa.title+'</div>D-PAD TOGGLES · A OPENS · B BACK</div>';
   }else{
     const a=ALBUMS[mus.album];
     h='<div class="mhead">MUSIC · '+a.title+'</div>'+
@@ -1260,10 +1261,26 @@ function renderMusic(){
   const sel=musicEl.querySelector('.sel');
   if(sel) sel.scrollIntoView({block:'nearest'});
 }
+let splashTop=0; /* which .splash .art layer is currently on top */
+/* swap tapes like slotting in a new cartridge: crossfade + settle the artwork */
+function swapSplash(){
+  const a=ALBUMS[mus.album];
+  const layers=musicEl.querySelectorAll('.splash .art');
+  if(layers.length<2){
+    if(layers.length){ layers[0].style.display='block'; layers[0].src=a.cover; layers[0].classList.add('on'); }
+  }else{
+    const incoming=layers[1-splashTop], outgoing=layers[splashTop];
+    incoming.style.display='block';
+    incoming.src=a.cover;
+    incoming.classList.add('on');
+    outgoing.classList.remove('on');
+    splashTop=1-splashTop;
+  }
+  const mnow=musicEl.querySelector('.mnow'); if(mnow) mnow.textContent=a.title;
+}
 function musicNav(d){
-  if(mus.level===0) mus.album=(mus.album+d+ALBUMS.length)%ALBUMS.length;
-  else{ const n=ALBUMS[mus.album].tracks.length; mus.track=(mus.track+d+n)%n; }
-  click(1400); renderMusic();
+  if(mus.level===0){ mus.album=(mus.album+d+ALBUMS.length)%ALBUMS.length; click(1400); swapSplash(); }
+  else{ const n=ALBUMS[mus.album].tracks.length; mus.track=(mus.track+d+n)%n; click(1400); renderMusic(); }
 }
 function musicSelect(){
   if(mus.level===0){ mus.level=1; mus.track=0; click(1800); renderMusic(); }
