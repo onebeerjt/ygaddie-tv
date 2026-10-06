@@ -375,6 +375,14 @@ body[data-shell="toxic"]{
   filter:brightness(.9)}
 .abtn small{font-family:var(--body-font);font-size:1.8cqw;letter-spacing:.18em;
   color:var(--ink-dim);text-shadow:none;line-height:1}
+/* --- action icons on the domes: always show what the button WILL DO --- */
+.abtn .bic{display:block;width:5.8cqw;height:5.8cqw}
+.abtn .bic svg{width:100%;height:100%;display:block;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.55))}
+.abtn.swap .bic{animation:bicswap .2s ease}
+@keyframes bicswap{0%{transform:scale(1);opacity:1}
+  45%{transform:scale(.05);opacity:0}
+  100%{transform:scale(1);opacity:1}}
 #a-x{left:0;top:30.3%}#a-y{left:30.3%;top:0}#a-a{right:0;top:30.3%}#a-b{left:30.3%;bottom:0}
 /* speaker grille: recessed dots */
 #speaker{position:absolute;right:12px;bottom:calc(8px + env(safe-area-inset-bottom));
@@ -413,6 +421,7 @@ body[data-shell="toxic"]{
 #helpov .hrow b{color:var(--accent);letter-spacing:.12em;white-space:nowrap;font-size:13px}
 #helpov .hclose{margin-top:16px;font-size:10px;letter-spacing:.26em;color:rgba(255,255,255,.55);
   text-align:center;font-family:var(--body-font)}
+#helpov .hrow b.hics svg{width:16px;height:16px;margin:0 2px;vertical-align:-3px}
 /* ============ START MENU ============ */
 #menu{position:absolute;inset:0;z-index:35;background:#0a0a0f;display:none;
   flex-direction:column;justify-content:flex-start;padding:7% 8% 5%;gap:4px;overflow:hidden}
@@ -465,10 +474,10 @@ body[data-shell="toxic"]{
           <h3>HOW TO PLAY</h3>
           <div class="hrow"><b>&#9664; &#9654;</b><span>Previous / next video</span></div>
           <div class="hrow"><b>&#9650; &#9660;</b><span>Swap cartridge</span></div>
-          <div class="hrow"><b>A</b><span>Next video / open link</span></div>
-          <div class="hrow"><b>B</b><span>Back</span></div>
-          <div class="hrow"><b>X</b><span>Pause / play</span></div>
-          <div class="hrow"><b>Y</b><span>Mute / unmute</span></div>
+          <div class="hrow"><b class="hics" id="h-a"></b><span>Next video · select in menus — the icon always shows what it does</span></div>
+          <div class="hrow"><b class="hics" id="h-b"></b><span>Back · previous video</span></div>
+          <div class="hrow"><b class="hics" id="h-x"></b><span>Pause / play</span></div>
+          <div class="hrow"><b class="hics" id="h-y"></b><span>Sound on / muted</span></div>
           <div class="hrow"><b>START</b><span>Menu · videos / music / links</span></div>
           <div class="hrow"><b>SELECT</b><span>Shell color</span></div>
           <div class="hclose">B OR TAP OUTSIDE TO CLOSE</div>
@@ -514,10 +523,10 @@ body[data-shell="toxic"]{
         <div id="shelltag">ATOMIC</div>
       </div>
       <div id="abxy" aria-label="Action buttons">
-        <button class="abtn" id="a-y" data-btn="y" aria-label="Y">Y<small>MUTE</small></button>
-        <button class="abtn" id="a-x" data-btn="x" aria-label="X">X<small>PAUSE</small></button>
-        <button class="abtn" id="a-a" data-btn="a" aria-label="A">A<small>NEXT</small></button>
-        <button class="abtn" id="a-b" data-btn="b" aria-label="B">B<small>BACK</small></button>
+        <button class="abtn" id="a-y" data-btn="y" data-ickey="mute" aria-label="Mute"><span class="bic"><svg viewBox="0 0 24 24"><path d="M3.5 9.5v5H8l5.5 4.5v-14L8 9.5z" fill="currentColor"/><path d="M16.2 9.8l4.6 4.6m0-4.6l-4.6 4.6" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg></span></button>
+        <button class="abtn" id="a-x" data-btn="x" data-ickey="pause" aria-label="Pause"><span class="bic"><svg viewBox="0 0 24 24"><path d="M7 5.5h3.6v13H7z" fill="currentColor"/><path d="M13.4 5.5H17v13h-3.6z" fill="currentColor"/></svg></span></button>
+        <button class="abtn" id="a-a" data-btn="a" data-ickey="next" aria-label="Next video"><span class="bic"><svg viewBox="0 0 24 24"><path d="M5 6.5v11l8-5.5z" fill="currentColor"/><path d="M14.5 6.5H17v11h-2.5z" fill="currentColor"/></svg></span></button>
+        <button class="abtn" id="a-b" data-btn="b" data-ickey="back" aria-label="Back"><span class="bic"><svg viewBox="0 0 24 24"><path d="M14.8 5.6L8.4 12l6.4 6.4 2.2-2.2-4.2-4.2 4.2-4.2z" fill="currentColor"/></svg></span></button>
       </div>
     </div>
     <div id="speaker"></div>
@@ -845,6 +854,54 @@ const IC={
   mail:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>',
   stream:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>'
 };
+/* ============ ACTION-BUTTON ICONS ============
+   The four domes show ACTION icons, not letters, and re-render every time
+   their function changes context. X shows the ACTION (press to pause/play);
+   Y shows the STATE (speaker with waves = sound on). */
+const BIC={
+  next:'<svg viewBox="0 0 24 24"><path d="M5 6.5v11l8-5.5z" fill="currentColor"/><path d="M14.5 6.5H17v11h-2.5z" fill="currentColor"/></svg>',
+  back:'<svg viewBox="0 0 24 24"><path d="M14.8 5.6L8.4 12l6.4 6.4 2.2-2.2-4.2-4.2 4.2-4.2z" fill="currentColor"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><path d="M9.2 15.9L5 11.7l-1.9 1.9L9.2 19.7l11.7-11.7-1.9-1.9z" fill="currentColor"/></svg>',
+  play:'<svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>',
+  pause:'<svg viewBox="0 0 24 24"><path d="M7 5.5h3.6v13H7z" fill="currentColor"/><path d="M13.4 5.5H17v13h-3.6z" fill="currentColor"/></svg>',
+  snd:'<svg viewBox="0 0 24 24"><path d="M3.5 9.5v5H8l5.5 4.5v-14L8 9.5z" fill="currentColor"/><path d="M16 9.2a4.4 4.4 0 010 5.6M18.4 7a7.4 7.4 0 010 10" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg>',
+  mute:'<svg viewBox="0 0 24 24"><path d="M3.5 9.5v5H8l5.5 4.5v-14L8 9.5z" fill="currentColor"/><path d="M16.2 9.8l4.6 4.6m0-4.6l-4.6 4.6" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg>'
+};
+/* what the A button does right now → [icon key, aria label] */
+function aKey(){
+  if(menu) return ['check','Select'];
+  if(mus) return mus.level===1 ? ['play','Play track'] : ['check','Open tape'];
+  if(musPlaying) return ['next','Next video'];
+  if(cart===2) return ['check','Open link'];
+  return ['next','Next video'];
+}
+function setBtnIcon(id,key,label){
+  const b=document.getElementById(id);
+  b.setAttribute('aria-label',label);
+  if(b.dataset.ickey===key) return;
+  b.dataset.ickey=key;
+  const html='<span class="bic">'+BIC[key]+'</span>';
+  if(!b.querySelector('.bic')||window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    b.innerHTML=html; return;
+  }
+  /* pop animation: shrink out, swap at the invisible midpoint, pop back in */
+  b.classList.remove('swap'); void b.offsetWidth; b.classList.add('swap');
+  clearTimeout(b._swt); clearTimeout(b._swt2);
+  b._swt=setTimeout(()=>{ b.innerHTML=html; },95);
+  b._swt2=setTimeout(()=>b.classList.remove('swap'),210);
+}
+function refreshButtons(){
+  const ak=aKey();
+  setBtnIcon('a-a',ak[0],ak[1]);
+  setBtnIcon('a-b','back','Back');
+  setBtnIcon('a-x',paused?'play':'pause',paused?'Play':'Pause');
+  setBtnIcon('a-y',muted?'mute':'snd',muted?'Unmute':'Mute');
+}
+/* help overlay shows the real icons, not letters */
+document.getElementById('h-a').innerHTML=BIC.next+BIC.check;
+document.getElementById('h-b').innerHTML=BIC.back;
+document.getElementById('h-x').innerHTML=BIC.pause+BIC.play;
+document.getElementById('h-y').innerHTML=BIC.snd+BIC.mute;
 let power=false, cart=0, item=0, linkSel=0, muted=true, paused=false, soundLocked=true;
 
 /* ================= CLICK / JINGLE / KA-CHUNK ================= */
@@ -958,6 +1015,7 @@ function tune(instant){
   if(isLinks){ nowt.textContent='PICK A LINK'; nows.textContent='D-PAD MOVES · A OPENS'; }
   else{ nowt.textContent=c.items[item].title; nows.textContent=c.items[item].sub; }
   try{if(navigator.vibrate) navigator.vibrate(12);}catch(e){}
+  refreshButtons();
 }
 function nextItem(d){
   const c=CARTS[cart];
@@ -980,7 +1038,7 @@ function openLink(){
 function unmute(){
   if(!power||!playerReady||!player) return;
   try{ player.unMute(); player.setVolume(100); }catch(e){}
-  muted=false; updateSoundHint(); click(2400);
+  muted=false; updateSoundHint(); click(2400); refreshButtons();
 }
 
 /* ================= POWER ================= */
@@ -993,6 +1051,7 @@ function powerOn(){
   soundLocked=true; muted=true;
   tune(true);            /* straight into the headliner, muted autoplay */
   updateSoundHint();     /* PRESS ANY BUTTON FOR SOUND until first press */
+  refreshButtons();
   try{localStorage.setItem('ygaddie-power','1');}catch(e){}
 }
 boot.addEventListener('click',()=>{click(1200);powerOn();});
@@ -1013,7 +1072,7 @@ function unlockSound(){
   soundLocked=false;
   coin();
   if(playerReady&&player){ try{player.unMute();player.setVolume(100);}catch(e){} }
-  muted=false; updateSoundHint();
+  muted=false; updateSoundHint(); refreshButtons();
 }
 function armFor(dir){
   return dir==='left'||dir==='right'
@@ -1063,10 +1122,12 @@ bindAB('a-b',()=>{
 bindAB('a-x',()=>{
   if(!power||!playerReady||!player) return;
   try{ paused?player.playVideo():player.pauseVideo(); paused=!paused; }catch(e){}
+  refreshButtons();
 },1300);
 bindAB('a-y',()=>{
   if(!power||!playerReady||!player) return;
   try{ muted?player.unMute():player.mute(); muted=!muted; updateSoundHint(); }catch(e){}
+  refreshButtons();
 },1000);
 bindAB('btnSelect',()=>{ cycleShell(1); },1600);
 bindAB('btnStart',()=>{ if(!power){ powerOn(); } else if(mus){ closeMusic(); } else if(musPlaying){ musicVideoBack(); } else if(menu){ closeMenu(); } else { openMenu(); } },1200);
@@ -1118,8 +1179,8 @@ try{
 /* ================= START MENU ================= */
 const menuEl=document.getElementById('menu');
 let menu=null; /* null | {level:0,tab} | {level:1,tab:0,item} */
-function openMenu(){ closeMusic(); menu={level:0,tab:0,item:0}; renderMenu(); menuEl.classList.add('show'); click(1200); }
-function closeMenu(){ menu=null; menuEl.classList.remove('show'); }
+function openMenu(){ closeMusic(); menu={level:0,tab:0,item:0}; renderMenu(); menuEl.classList.add('show'); click(1200); refreshButtons(); }
+function closeMenu(){ menu=null; menuEl.classList.remove('show'); refreshButtons(); }
 function renderMenu(){
   let h;
   if(menu.level===0){
@@ -1153,10 +1214,12 @@ function menuSelect(){
   }else{
     cart=0; item=menu.item; linkSel=0; closeMenu(); tune();
   }
+  refreshButtons();
 }
 function menuBack(){
   if(menu.level===1){ menu.level=0; renderMenu(); }
   else closeMenu();
+  refreshButtons();
 }
 /* ================= MUSIC HUB =================
    START → MUSIC → album shelf (real cover art, tactile tiles)
@@ -1166,8 +1229,8 @@ function menuBack(){
 const musicEl=document.getElementById('music');
 let mus=null;        /* null | {level:0,album} | {level:1,album,track} */
 let musPlaying=null; /* {a,t,video} while a track video owns the screen */
-function openMusic(){ mus={level:0,album:0}; renderMusic(); musicEl.classList.add('show'); click(1200); }
-function closeMusic(){ mus=null; musPlaying=null; musicEl.classList.remove('show'); }
+function openMusic(){ mus={level:0,album:0}; renderMusic(); musicEl.classList.add('show'); click(1200); refreshButtons(); }
+function closeMusic(){ mus=null; musPlaying=null; musicEl.classList.remove('show'); refreshButtons(); }
 function coverBlock(a,wrapCls){
   return '<div class="'+wrapCls+'"><div class="cover-fb">'+IC.note+'</div>'+
     '<img class="cover" src="'+a.cover+'" alt="" onerror="this.remove()"></div>';
@@ -1209,10 +1272,12 @@ function musicSelect(){
     if(t.video) playTrackVideo(mus.album,mus.track);
     else window.open(a.stream,'_blank','noopener');
   }
+  refreshButtons();
 }
 function musicBack(){
   if(mus.level===1){ mus.level=0; renderMusic(); click(1500); }
   else closeMusic();
+  refreshButtons();
 }
 function playTrackVideo(a,t){
   const tr=ALBUMS[a].tracks[t];
@@ -1224,6 +1289,7 @@ function playTrackVideo(a,t){
   videowrap.classList.remove('crt-on'); videowrap.classList.add('crt-off');
   setTimeout(()=>{
     try{ if(playerReady&&player){ player.loadVideoById(tr.video); paused=false; } }catch(e){}
+    refreshButtons();
     videowrap.classList.remove('crt-off'); videowrap.classList.add('crt-on');
     setTimeout(()=>videowrap.classList.remove('crt-on'),300);
   },190);
@@ -1231,6 +1297,7 @@ function playTrackVideo(a,t){
   nowt.textContent=tr.t;
   nows.textContent=ALBUMS[a].artist+' · '+tr.d;
   kaChunk();
+  refreshButtons();
 }
 function trackVideoNext(d){
   if(!musPlaying) return;
@@ -1243,8 +1310,10 @@ function musicVideoBack(){
   if(!musPlaying) return;
   const mp=musPlaying; musPlaying=null;
   try{ if(playerReady&&player) player.pauseVideo(); }catch(e){}
+  paused=true; /* keep the X icon honest: the video is now paused */
   mus={level:1,album:mp.a,track:mp.t};
   renderMusic(); musicEl.classList.add('show'); click(1500);
+  refreshButtons();
 }
 /* ================= HELP OVERLAY ================= */
 const helpov=document.getElementById('helpov');
