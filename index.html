@@ -213,18 +213,80 @@ body[data-shell="toxic"]{
   animation:hintpulse 1.4s ease-in-out infinite}
 #soundhint.show{display:flex}
 @keyframes hintpulse{50%{transform:translateX(-50%) scale(1.06)}}
-/* ============ LINK MENU ============ */
+/* ============ LINK MENU — tile grid ============ */
 #linkmenu{position:absolute;inset:0;z-index:15;background:#0a0a0f;display:none;
-  flex-direction:column;justify-content:center;padding:8% 9%;gap:4px}
+  flex-direction:column;justify-content:center;padding:8% 9%;gap:10px}
 #linkmenu.show{display:flex}
 #linkmenu .lmhead{font-family:var(--body-font);font-size:10px;letter-spacing:.3em;
-  color:var(--accent);margin-bottom:10px}
-.lmitem{font-family:var(--head-font);font-size:clamp(17px,4.6vw,26px);color:#c9c9c9;
-  padding:11px 12px;border:1px solid transparent;border-radius:6px;letter-spacing:.04em}
-.lmitem.sel{color:#fff;background:rgba(255,255,255,.09);border-color:var(--accent);
-  box-shadow:var(--glow)}
-.lmitem .lmurl{display:block;font-family:var(--body-font);font-size:9px;letter-spacing:.14em;
-  opacity:.55;margin-top:3px}
+  color:var(--accent);margin-bottom:2px}
+#linkmenu .tilegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{position:relative;border:1px solid rgba(255,255,255,.12);border-radius:10px;
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.01));
+  padding:14px 8px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;
+  cursor:pointer;transition:transform .12s ease,border-color .12s,box-shadow .12s}
+.tile svg{width:30px;height:30px;stroke:var(--accent);fill:none;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round}
+.tile .tname{font-family:var(--head-font);font-size:12px;letter-spacing:.08em;color:#ddd}
+.tile .tsub{font-family:var(--body-font);font-size:8px;letter-spacing:.14em;color:rgba(255,255,255,.5)}
+.tile.sel{border-color:var(--accent);box-shadow:var(--glow);transform:translateY(-3px) scale(1.03)}
+.tile.sel .tname{color:#fff}
+.tile:active{transform:translateY(-3px) scale(1.04)}
+#linkmenu .lmfoot{font-family:var(--body-font);font-size:9px;letter-spacing:.24em;
+  color:rgba(255,255,255,.45);text-align:center;margin-top:4px}
+/* ============ MUSIC HUB ============ */
+#music{position:absolute;inset:0;z-index:35;background:#0a0a0f;display:none;
+  flex-direction:column;padding:9% 8%;overflow:hidden}
+#music.show{display:flex}
+#music .mhead{font-family:var(--body-font);font-size:10px;letter-spacing:.3em;
+  color:var(--accent);margin-bottom:10px;flex:0 0 auto}
+#music .mnote-ic{width:15px;height:15px;stroke:var(--accent);fill:none;stroke-width:2;
+  vertical-align:-2px;margin-right:6px}
+/* shelf: album tiles */
+#music .shelf{display:grid;grid-template-columns:1fr 1fr;gap:12px;overflow:auto;padding-bottom:6px}
+.album-tile{border:1px solid rgba(255,255,255,.12);border-radius:10px;overflow:hidden;
+  background:#111;cursor:pointer;transition:transform .14s cubic-bezier(.3,1.6,.5,1),box-shadow .14s,border-color .14s}
+.album-tile .cover{aspect-ratio:1/1;width:100%;object-fit:cover;display:block;background:#1a1a22}
+.album-tile .cover-fb{aspect-ratio:1/1;width:100%;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#2a1a4a,#0e2a3a);font-family:var(--head-font);
+  font-size:22px;color:#fff;letter-spacing:.06em;text-align:center;padding:10px}
+.album-tile .ainfo{padding:9px 10px}
+.album-tile .aname{font-family:var(--head-font);font-size:13px;color:#eee;letter-spacing:.05em}
+.album-tile .ameta{font-family:var(--body-font);font-size:8.5px;letter-spacing:.14em;
+  color:rgba(255,255,255,.55);margin-top:3px}
+.album-tile.sel{border-color:var(--accent);box-shadow:var(--glow);transform:translateY(-4px) scale(1.03)}
+.album-tile:active{transform:translateY(-4px) scale(1.04)}
+/* tracklist */
+#music .thead{display:flex;gap:10px;align-items:center;margin-bottom:10px;flex:0 0 auto}
+#music .thead .covwrap{position:relative;width:46px;height:46px;flex:0 0 auto;
+  border-radius:6px;overflow:hidden;background:#1a1a22}
+#music .thead .cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#music .thead .cover-fb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#2a1a4a,#0e2a3a);font-family:var(--head-font);
+  font-size:8px;color:#fff;text-align:center;padding:2px}
+#music .thead .tt{font-family:var(--head-font);font-size:15px;color:#fff;letter-spacing:.04em}
+#music .thead .ts{font-family:var(--body-font);font-size:8.5px;letter-spacing:.14em;
+  color:rgba(255,255,255,.55);margin-top:2px}
+#music .tracks{overflow:auto;flex:1 1 auto;min-height:0}
+.track{display:flex;align-items:center;gap:10px;padding:9px 8px;border-radius:8px;
+  border:1px solid transparent;cursor:pointer}
+.track .tn{font-family:var(--body-font);font-size:10px;color:rgba(255,255,255,.4);width:18px;flex:0 0 auto}
+.track .ti{flex:1 1 auto;min-width:0}
+.track .tname2{font-family:var(--body-font);font-weight:600;font-size:12.5px;color:#ddd;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.02em}
+.track .td{font-family:var(--body-font);font-size:9px;color:rgba(255,255,255,.45);flex:0 0 auto}
+.track .tbtn{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1px solid var(--accent);
+  display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.05)}
+.track .tbtn svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round}
+.track.sel{background:rgba(255,255,255,.08);border-color:var(--accent);box-shadow:var(--glow)}
+.track.sel .tname2{color:#fff}
+#music .mfoot{flex:0 0 auto;font-family:var(--body-font);font-size:9px;letter-spacing:.24em;
+  color:rgba(255,255,255,.45);text-align:center;margin-top:8px}
+/* stagger cascade on every view render */
+#menu .mitem,#music .album-tile,#music .track,#linkmenu .tile{
+  animation:tilein .34s cubic-bezier(.2,1.2,.4,1) both;animation-delay:calc(var(--i,0)*45ms)}
+@keyframes tilein{from{opacity:0;transform:translateY(16px) scale(.95)}to{opacity:1;transform:none}}
+#music .mhead,#music .thead,#linkmenu .lmhead{animation:tilein .3s ease both}
 /* ============ OSD + NOW PLAYING ============ */
 #osd{position:absolute;top:5%;right:5%;z-index:16;pointer-events:none;text-align:right;
   font-family:var(--head-font);font-size:clamp(30px,8vw,54px);line-height:1;color:#fff;
@@ -391,17 +453,18 @@ body[data-shell="toxic"]{
           <div class="hrow"><b>B</b><span>Back</span></div>
           <div class="hrow"><b>X</b><span>Pause / play</span></div>
           <div class="hrow"><b>Y</b><span>Mute / unmute</span></div>
-          <div class="hrow"><b>START</b><span>Menu</span></div>
+          <div class="hrow"><b>START</b><span>Menu · videos / music / links</span></div>
           <div class="hrow"><b>SELECT</b><span>Shell color</span></div>
           <div class="hclose">B OR TAP OUTSIDE TO CLOSE</div>
         </div>
         <div id="menu"></div>
+        <div id="music"></div>
         <div id="shelltoast"><div class="st-k">SHELL</div><div class="st-name"></div><div class="st-dots"></div></div>
         <div id="osd">CART 01<small id="osdname">VIDEOS</small></div>
         <div id="nowbar">
           <div class="ch" id="nowch">CART 01 · MUSIC VIDEOS</div>
-          <div class="t" id="nowt">UCONN FREESTYLE</div>
-          <div class="s" id="nows">ANT &amp; LORD FUBU FT. SODUH</div>
+          <div class="t" id="nowt">HUEY P IN HELLCAT</div>
+          <div class="s" id="nows">ANT &amp; LORD FUBU FT. GOD ZEUS · NEW VIDEO</div>
         </div>
         <div id="soundhint">TAP FOR SOUND</div>
         <div id="boot" role="button" aria-label="Power on">
@@ -449,9 +512,10 @@ body[data-shell="toxic"]{
 /* ================= DATA ================= */
 /* Videos verified live 2026-10-06: @ygaddie's IG bio link (ffm.to/all-so-simple,
    the ALL SO SIMPLE tape) + his "LINK IN BIO" reels + official videos.
-   UCONN FREESTYLE leads — it's the current LINK IN BIO headliner. */
+   HUEY P IN HELLCAT leads — dropped Oct 2026, the newest video. */
 const CARTS = [
   { name:'MUSIC VIDEOS', items:[
+    { title:'HUEY P IN HELLCAT',     sub:'ANT & LORD FUBU FT. GOD ZEUS · NEW VIDEO',video:'y46k227vmSI' },
     { title:'UCONN FREESTYLE',       sub:'ANT & LORD FUBU FT. SODUH · LINK IN BIO',video:'NSK-9UcMrEM' },
     { title:'TESTAROSSA',            sub:'YGADDIE ft. Hoodrich Pablo & Offset',   video:'YlqHQJjqaw0' },
     { title:'MARINO PARIS · CH. 2',  sub:'ANT & LORD FUBU FT. JMK$',              video:'DbI_ZDw3jxg' },
@@ -478,6 +542,42 @@ const CARTS = [
     { title:'ALL SO SIMPLE',    sub:'STREAM EVERYWHERE',        url:'https://ffm.to/all-so-simple' },
   ]},
 ];
+/* ================= MUSIC DATA =================
+   ALL SO SIMPLE — A$AP ANT & LORD FUBU, Marino Infantry Records, May 2026.
+   Tracklist + durations verified via Deezer (19-05-2026). Cover art is the
+   real tape artwork. Per-track video IDs only where a video is verified. */
+const ALBUMS=[{
+  title:'ALL SO SIMPLE', artist:'A$AP ANT & LORD FUBU', year:'2026',
+  meta:'15 TRACKS · PROD. LORD FUBU',
+  cover:'https://respecta.is/uploads/posts/2026-05/thumbs/1779206391_asapant-ass.jpg',
+  stream:'https://ffm.to/all-so-simple',
+  tracks:[
+    {t:'PONZU SAUCE',d:'1:37'},
+    {t:'HUEY P IN HELLCAT FT. GOD ZEUS',d:'1:54',video:'y46k227vmSI'},
+    {t:'UCONN FREESTYLE FT. SODUH',d:'1:42',video:'NSK-9UcMrEM'},
+    {t:'PS2 & FLATSCREENS',d:'1:36'},
+    {t:'SYRUP IN BERLIN',d:'1:51'},
+    {t:'WOCK AGE LIKE WINE FT. LULU P',d:'2:13'},
+    {t:'CHEESECAKE INTERIOR',d:'1:46'},
+    {t:'MARINO PARIS CHAPTER 2 FT. JMK$',d:'2:04',video:'DbI_ZDw3jxg'},
+    {t:'WAR CHEST',d:'2:07'},
+    {t:'KANE IN THE DRIVE THRU',d:'1:48'},
+    {t:'DIGITAL CURRENCY',d:'1:40'},
+    {t:'DISABLED ALL MY SOCIALS',d:'1:30'},
+    {t:'NAUSEA',d:'1:50'},
+    {t:'JUICE STAINS FT. SODUH & LULU P',d:'2:31'},
+    {t:'LINE COMING THRU DA $ FT. BABY 9ENO & SODUH',d:'2:57'},
+  ]
+}];
+/* inline SVG glyphs — no emoji anywhere */
+const IC={
+  note:'<svg viewBox="0 0 24 24"><path d="M9 17.5V6l10-2v11"/><circle cx="6.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="15" r="2.5"/></svg>',
+  play:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg>',
+  cam:'<svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="3"/><circle cx="12" cy="13" r="4"/><circle cx="17.2" cy="10" r="1.2"/></svg>',
+  bag:'<svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M8.5 10V6.5a3.5 3.5 0 0 1 7 0V10"/></svg>',
+  mail:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>',
+  stream:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>'
+};
 let power=false, cart=0, item=0, linkSel=0, muted=true, paused=false, soundLocked=true;
 
 /* ================= CLICK / JINGLE / KA-CHUNK ================= */
@@ -538,11 +638,14 @@ function showOSD(text){
   clearTimeout(osdTimer);
   osdTimer=setTimeout(()=>osd.classList.remove('show'),2200);
 }
+const LINKICONS=[IC.cam,IC.bag,IC.mail,IC.stream];
 function renderLinks(){
   const L=CARTS[2].links;
-  linkmenu.innerHTML='<div class="lmhead">SELECT · A TO OPEN</div>'+L.map((l,i)=>
-    '<div class="lmitem'+(i===linkSel?' sel':'')+'">'+l.title+
-    '<span class="lmurl">'+l.sub+'</span></div>').join('');
+  linkmenu.innerHTML='<div class="lmhead">SELECT · A TO OPEN</div>'+
+    '<div class="tilegrid">'+L.map((l,i)=>
+      '<div class="tile'+(i===linkSel?' sel':'')+'" style="--i:'+i+'">'+LINKICONS[i%LINKICONS.length]+
+      '<div class="tname">'+l.title+'</div><div class="tsub">'+l.sub+'</div></div>').join('')+'</div>'+
+    '<div class="lmfoot">D-PAD MOVES · A OPENS · B BACK</div>';
 }
 function updateSoundHint(){
   soundhint.textContent = soundLocked ? 'PRESS ANY BUTTON FOR SOUND' : 'TAP FOR SOUND';
@@ -655,10 +758,19 @@ document.querySelectorAll('#dpad .dir').forEach(b=>{
     if(!power) return;
     const d=b.dataset.dir;
     if(menu){ menuNav((d==='up'||d==='left')?-1:1); return; }
+    if(mus){ musicNav((d==='up'||d==='left')?-1:1); return; }
+    if(musPlaying){
+      if(d==='left') trackVideoNext(-1);
+      else if(d==='right') trackVideoNext(1);
+      return;
+    }
     if(cart===2){
-      const L=CARTS[2].links.length;
-      if(d==='up'||d==='left') linkSel=(linkSel-1+L)%L;
-      else linkSel=(linkSel+1)%L;
+      const L=CARTS[2].links.length, cols=2;
+      if(d==='left') linkSel=(linkSel-1+L)%L;
+      else if(d==='right') linkSel=(linkSel+1)%L;
+      else if(d==='up') linkSel=(linkSel-cols+L)%L;
+      else linkSel=(linkSel+cols)%L;
+      click(1400);
       renderLinks();
     }else{
       if(d==='left') nextItem(-1);
@@ -671,11 +783,13 @@ function bindAB(id,fn,f){
   const b=document.getElementById(id);
   b.addEventListener('click',e=>{e.stopPropagation(); if(pressFx(b,f)) return; fn();});
 }
-bindAB('a-a',()=>{ if(!power) return; if(menu){ menuSelect(); return; } if(cart===2) openLink(); else nextItem(1); },2100);
+bindAB('a-a',()=>{ if(!power) return; if(menu){ menuSelect(); return; } if(mus){ musicSelect(); return; } if(musPlaying){ trackVideoNext(1); return; } if(cart===2) openLink(); else nextItem(1); },2100);
 bindAB('a-b',()=>{
   if(!power) return;
   if(helpOpen){ setHelp(false); return; }
   if(menu){ menuBack(); return; }
+  if(mus){ musicBack(); return; }
+  if(musPlaying){ musicVideoBack(); return; }
   if(cart===2) nextCart(-1); else nextItem(-1);
 },1700);
 bindAB('a-x',()=>{
@@ -687,7 +801,7 @@ bindAB('a-y',()=>{
   try{ muted?player.unMute():player.mute(); muted=!muted; updateSoundHint(); }catch(e){}
 },1000);
 bindAB('btnSelect',()=>{ cycleShell(1); },1600);
-bindAB('btnStart',()=>{ if(!power){ powerOn(); } else if(menu){ closeMenu(); } else { openMenu(); } },1200);
+bindAB('btnStart',()=>{ if(!power){ powerOn(); } else if(mus){ closeMusic(); } else if(musPlaying){ musicVideoBack(); } else if(menu){ closeMenu(); } else { openMenu(); } },1200);
 
 /* ================= SHELLS ================= */
 const SHELLS=[
@@ -735,21 +849,21 @@ try{
 /* ================= START MENU ================= */
 const menuEl=document.getElementById('menu');
 let menu=null; /* null | {level:0,tab} | {level:1,tab:0,item} */
-function openMenu(){ menu={level:0,tab:0,item:0}; renderMenu(); menuEl.classList.add('show'); click(1200); }
+function openMenu(){ closeMusic(); menu={level:0,tab:0,item:0}; renderMenu(); menuEl.classList.add('show'); click(1200); }
 function closeMenu(){ menu=null; menuEl.classList.remove('show'); }
 function renderMenu(){
   let h;
   if(menu.level===0){
-    const subs=[CARTS[0].items.length+' VIDEOS','ANT & LORD FUBU',CARTS[2].links.length+' LINKS'];
+    const subs=[CARTS[0].items.length+' VIDEOS','ALL SO SIMPLE · 15 TRACKS',CARTS[2].links.length+' LINKS'];
     h='<div class="mhead">START · MENU</div>'+
-      ['VIDEOS','TAPE','LINKS'].map((t,i)=>
-        '<div class="mitem'+(i===menu.tab?' sel':'')+'">'+t+
+      ['VIDEOS','MUSIC','LINKS'].map((t,i)=>
+        '<div class="mitem'+(i===menu.tab?' sel':'')+'" style="--i:'+i+'">'+t+
         '<span class="msub">'+subs[i]+'</span></div>').join('')+
       '<div class="mhead" style="margin-top:12px">A SELECTS · B BACKS OUT</div>';
   }else{
     h='<div class="mhead">VIDEOS — PICK ONE</div>'+
       CARTS[0].items.map((v,i)=>
-        '<div class="mitem'+(i===menu.item?' sel':'')+'">'+v.title+
+        '<div class="mitem'+(i===menu.item?' sel':'')+'" style="--i:'+i+'">'+v.title+
         '<span class="msub">'+v.sub+'</span></div>').join('');
   }
   menuEl.innerHTML=h;
@@ -764,7 +878,7 @@ function menuNav(d){
 function menuSelect(){
   if(menu.level===0){
     if(menu.tab===0){ menu.level=1; menu.item=item; renderMenu(); }
-    else if(menu.tab===1){ cart=1; item=0; linkSel=0; closeMenu(); tune(); }
+    else if(menu.tab===1){ closeMenu(); openMusic(); }
     else{ cart=2; item=0; linkSel=0; closeMenu(); tune(); }
   }else{
     cart=0; item=menu.item; linkSel=0; closeMenu(); tune();
@@ -773,6 +887,95 @@ function menuSelect(){
 function menuBack(){
   if(menu.level===1){ menu.level=0; renderMenu(); }
   else closeMenu();
+}
+/* ================= MUSIC HUB =================
+   START → MUSIC → album shelf (real cover art, tactile tiles)
+   → tracklist (15 verified tracks, per-track video/stream actions).
+   Tapping a track's video button plays it full-screen IN the Game Boy;
+   B returns to the tracklist. */
+const musicEl=document.getElementById('music');
+let mus=null;        /* null | {level:0,album} | {level:1,album,track} */
+let musPlaying=null; /* {a,t,video} while a track video owns the screen */
+function openMusic(){ mus={level:0,album:0}; renderMusic(); musicEl.classList.add('show'); click(1200); }
+function closeMusic(){ mus=null; musPlaying=null; musicEl.classList.remove('show'); }
+function coverBlock(a,wrapCls){
+  return '<div class="'+wrapCls+'"><div class="cover-fb">'+a.title+'</div>'+
+    '<img class="cover" src="'+a.cover+'" alt="" onerror="this.remove()"></div>';
+}
+function renderMusic(){
+  let h;
+  if(mus.level===0){
+    h='<div class="mhead">'+IC.note.replace('<svg','<svg class="mnote-ic"')+'MUSIC · PICK A TAPE</div><div class="shelf">'+
+      ALBUMS.map((a,i)=>'<div class="album-tile'+(i===mus.album?' sel':'')+'" style="--i:'+i+'">'+
+        coverBlock(a,'covwrap')+
+        '<div class="ainfo"><div class="aname">'+a.title+'</div><div class="ameta">'+a.meta+'</div></div></div>').join('')+
+      '</div><div class="mfoot">A OPENS · B BACK</div>';
+  }else{
+    const a=ALBUMS[mus.album];
+    h='<div class="mhead">MUSIC · '+a.title+'</div>'+
+      '<div class="thead">'+coverBlock(a,'covwrap')+
+      '<div><div class="tt">'+a.title+'</div><div class="ts">'+a.artist+' · '+a.year+'</div></div></div>'+
+      '<div class="tracks">'+a.tracks.map((t,i)=>
+        '<div class="track'+(i===mus.track?' sel':'')+'" style="--i:'+i+'">'+
+        '<div class="tn">'+String(i+1).padStart(2,'0')+'</div>'+
+        '<div class="ti"><div class="tname2">'+t.t+'</div></div>'+
+        '<div class="td">'+t.d+'</div>'+
+        '<div class="tbtn">'+(t.video?IC.play:IC.stream)+'</div>'+
+        '</div>').join('')+'</div>'+
+      '<div class="mfoot">'+(a.tracks[mus.track].video?'A PLAYS THE VIDEO':'A STREAMS THE TAPE')+' · B BACK</div>';
+  }
+  musicEl.innerHTML=h;
+  const sel=musicEl.querySelector('.sel');
+  if(sel) sel.scrollIntoView({block:'nearest'});
+}
+function musicNav(d){
+  if(mus.level===0) mus.album=(mus.album+d+ALBUMS.length)%ALBUMS.length;
+  else{ const n=ALBUMS[mus.album].tracks.length; mus.track=(mus.track+d+n)%n; }
+  click(1400); renderMusic();
+}
+function musicSelect(){
+  if(mus.level===0){ mus.level=1; mus.track=0; click(1800); renderMusic(); }
+  else{
+    const a=ALBUMS[mus.album], t=a.tracks[mus.track];
+    if(t.video) playTrackVideo(mus.album,mus.track);
+    else window.open(a.stream,'_blank','noopener');
+  }
+}
+function musicBack(){
+  if(mus.level===1){ mus.level=0; renderMusic(); click(1500); }
+  else closeMusic();
+}
+function playTrackVideo(a,t){
+  const tr=ALBUMS[a].tracks[t];
+  if(!tr.video) return;
+  musPlaying={a:a,t:t,video:tr.video};
+  mus=null;
+  musicEl.classList.remove('show');
+  document.getElementById('a-a').classList.remove('ended');
+  videowrap.classList.remove('crt-on'); videowrap.classList.add('crt-off');
+  setTimeout(()=>{
+    try{ if(playerReady&&player){ player.loadVideoById(tr.video); paused=false; } }catch(e){}
+    videowrap.classList.remove('crt-off'); videowrap.classList.add('crt-on');
+    setTimeout(()=>videowrap.classList.remove('crt-on'),300);
+  },190);
+  nowch.textContent='MUSIC · '+ALBUMS[a].title;
+  nowt.textContent=tr.t;
+  nows.textContent=ALBUMS[a].artist+' · '+tr.d;
+  kaChunk();
+}
+function trackVideoNext(d){
+  if(!musPlaying) return;
+  const trs=ALBUMS[musPlaying.a].tracks;
+  let t=musPlaying.t;
+  for(let k=0;k<trs.length;k++){ t=(t+d+trs.length)%trs.length; if(trs[t].video) break; }
+  playTrackVideo(musPlaying.a,t);
+}
+function musicVideoBack(){
+  if(!musPlaying) return;
+  const mp=musPlaying; musPlaying=null;
+  try{ if(playerReady&&player) player.pauseVideo(); }catch(e){}
+  mus={level:1,album:mp.a,track:mp.t};
+  renderMusic(); musicEl.classList.add('show'); click(1500);
 }
 /* ================= HELP OVERLAY ================= */
 const helpov=document.getElementById('helpov');
@@ -786,21 +989,21 @@ helpov.addEventListener('click',e=>{ if(e.target===helpov) setHelp(false); });
 /* ================= KEYBOARD + SWIPE ================= */
 document.addEventListener('keydown',e=>{
   const k=e.key.toLowerCase();
-  if(k==='arrowleft'){ if(menu) menuNav(-1); else nextItem(-1); }
-  else if(k==='arrowright'){ if(menu) menuNav(1); else nextItem(1); }
-  else if(k==='arrowup'){ if(menu) menuNav(-1); else nextCart(-1); }
-  else if(k==='arrowdown'){ if(menu) menuNav(1); else nextCart(1); }
+  if(k==='arrowleft'){ if(menu) menuNav(-1); else if(mus) musicNav(-1); else if(musPlaying) trackVideoNext(-1); else nextItem(-1); }
+  else if(k==='arrowright'){ if(menu) menuNav(1); else if(mus) musicNav(1); else if(musPlaying) trackVideoNext(1); else nextItem(1); }
+  else if(k==='arrowup'){ if(menu) menuNav(-1); else if(mus) musicNav(-1); else nextCart(-1); }
+  else if(k==='arrowdown'){ if(menu) menuNav(1); else if(mus) musicNav(1); else nextCart(1); }
   else if(k==='a') document.getElementById('a-a').click();
   else if(k==='b') document.getElementById('a-b').click();
   else if(k==='x') document.getElementById('a-x').click();
   else if(k==='y') document.getElementById('a-y').click();
-  else if(k==='m'){ if(power){ menu?closeMenu():openMenu(); } }
+  else if(k==='m'){ if(power){ if(mus) closeMusic(); else if(musPlaying) musicVideoBack(); else if(menu) closeMenu(); else openMenu(); } }
   else if(k==='enter') powerOn();
 });
 let tx0=null,ty0=null;
 screen.addEventListener('touchstart',e=>{tx0=e.touches[0].clientX;ty0=e.touches[0].clientY;},{passive:true});
 screen.addEventListener('touchend',e=>{
-  if(tx0===null||!power||cart===2||menu) return;
+  if(tx0===null||!power||cart===2||menu||mus||musPlaying) return;
   const dx=e.changedTouches[0].clientX-tx0, dy=e.changedTouches[0].clientY-ty0;
   if(Math.abs(dx)>44&&Math.abs(dx)>Math.abs(dy)*1.4) nextItem(dx<0?1:-1);
   else if(Math.abs(dy)>44&&Math.abs(dy)>Math.abs(dx)*1.4) nextCart(dy<0?1:-1);
