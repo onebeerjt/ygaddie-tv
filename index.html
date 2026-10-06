@@ -570,8 +570,9 @@ body.theater #fsexit{display:flex}
 .hlink{display:flex;align-items:center;gap:12px;border:1px solid rgba(255,255,255,.13);border-radius:12px;background:#0e0e13;
   color:#fff;text-decoration:none;padding:12px;margin-bottom:10px}
 .hlink .hic{width:32px;height:32px;flex:0 0 auto;color:var(--btn-ink)}
-.hlink .hic svg{width:100%;height:100%}
-.hlink .htx{flex:1;min-width:0}
+.hlink .hic svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hlink .hic svg.fx{fill:currentColor;stroke:none}
+.hlink .htx{flex:1;min-width:0;display:flex;flex-direction:column}
 .hlink .ht{font-family:var(--head-font);font-size:13px;letter-spacing:.07em}
 .hlink .hs{font-size:10px;letter-spacing:.12em;color:rgba(255,255,255,.5);font-weight:600;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hlink .hchev{width:20px;height:20px;color:rgba(255,255,255,.4);flex:0 0 auto}
@@ -1709,7 +1710,7 @@ function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 const HUBIC={
   chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>',
   ext:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M14 4h6v6M20 4l-9 9"/><path d="M19 13.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5.5"/></svg>',
-  x:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1.6 2H8l4.4 5.9L18.9 2zm-1.1 17.8h1.7L7.1 3.9H5.3l12.5 16z"/></svg>',
+  x:'<svg class="fx" viewBox="0 0 24 24"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1.6 2H8l4.4 5.9L18.9 2zm-1.1 17.8h1.7L7.1 3.9H5.3l12.5 16z"/></svg>',
   close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>'
 };
 /* streaming profiles verified 2026-10-06: YouTube @marinoinfantry via oEmbed
