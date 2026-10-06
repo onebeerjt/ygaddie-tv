@@ -32,13 +32,13 @@
    glassy screen, tactile buttons. No page chrome.
    ============================================================ */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden}
+html,body{height:100%}
 body{
   font-family:'Space Grotesk',system-ui,sans-serif;color:#f2f2f2;
-  height:100dvh;width:100vw;overflow:hidden;background:#000;
+  min-height:100dvh;width:100vw;overflow-x:hidden;overflow-y:auto;background:#000;
   -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
-  touch-action:manipulation;overscroll-behavior:none;
-  position:fixed;inset:0;
+  touch-action:manipulation;overscroll-behavior-y:none;
+  position:relative;
 }
 /* ============ SHELL THEMES ============ */
 body[data-shell="atomic"]{
@@ -531,6 +531,64 @@ body.theater #fsexit{display:flex}
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.01ms!important;transition-duration:.01ms!important}
 }
+/* ============ HUB: ALL MY LINKS (scrolls below the device) ============ */
+#scrollcue{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:5;
+  display:flex;flex-direction:column;align-items:center;gap:3px;pointer-events:none;
+  font-family:var(--head-font);font-size:10px;letter-spacing:.35em;text-indent:.35em;color:var(--btn-ink);
+  opacity:.9;animation:cuebob 1.8s ease-in-out infinite}
+#scrollcue svg{width:18px;height:18px}
+@keyframes cuebob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,7px)}}
+#hub{position:relative;z-index:2;max-width:620px;margin:0 auto;padding:30px 16px 130px;
+  background:linear-gradient(180deg,#060608 0%,#0a0c08 60%,#070907 100%)}
+.hub-kicker{font-family:var(--head-font);font-size:11px;letter-spacing:.3em;text-indent:.3em;color:var(--btn-ink);text-align:center;margin-bottom:8px}
+.hub-h{font-family:var(--head-font);font-size:clamp(22px,6vw,30px);letter-spacing:.12em;color:#fff;margin:30px 0 2px}
+.hub-sub{font-size:11px;letter-spacing:.2em;color:rgba(255,255,255,.5);margin-bottom:14px;font-weight:600}
+.tape{border:1px solid rgba(255,255,255,.13);border-radius:12px;background:#0e0e13;margin-bottom:10px;overflow:hidden}
+.tape-head{display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;color:#fff;padding:10px;text-align:left;cursor:pointer;font:inherit}
+.tcov{width:56px;height:56px;border-radius:8px;object-fit:cover;flex:0 0 auto;background:#1a1a20}
+.ttx{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.tt{font-family:var(--head-font);font-size:14px;letter-spacing:.05em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tm{font-size:10px;letter-spacing:.16em;color:rgba(255,255,255,.5);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tchev{width:22px;height:22px;color:var(--btn-ink);transition:transform .25s;flex:0 0 auto}
+.tape.open .tchev{transform:rotate(90deg)}
+.tracks{display:none;border-top:1px solid rgba(255,255,255,.09)}
+.tape.open .tracks{display:block}
+.trk{display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.06);color:#fff;text-decoration:none;min-height:48px}
+.trk:last-child{border-bottom:0}
+.trk.playing{background:rgba(255,255,255,.06)}
+.tplay{width:34px;height:34px;flex:0 0 auto;border-radius:50%;border:1.5px solid var(--btn-ink);background:none;color:var(--btn-ink);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.tplay svg{width:15px;height:15px}
+.trk.playing .tplay{background:var(--btn-ink);color:#0a0a0a}
+.tn{flex:1;min-width:0;font-size:12.5px;font-weight:600;letter-spacing:.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.td{font-size:11px;color:rgba(255,255,255,.5);font-weight:600;font-variant-numeric:tabular-nums;flex:0 0 auto}
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.svc{border:1px solid rgba(255,255,255,.13);border-radius:12px;background:#0e0e13;color:#fff;text-decoration:none;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:16px 6px 14px;text-align:center;min-height:118px}
+.svc svg{width:30px;height:30px;color:var(--btn-ink)}
+.svc span{font-family:var(--head-font);font-size:11px;letter-spacing:.08em}
+.svc small{font-size:9px;letter-spacing:.1em;color:rgba(255,255,255,.5);font-weight:600;line-height:1.5}
+.hlink{display:flex;align-items:center;gap:12px;border:1px solid rgba(255,255,255,.13);border-radius:12px;background:#0e0e13;
+  color:#fff;text-decoration:none;padding:12px;margin-bottom:10px}
+.hlink .hic{width:32px;height:32px;flex:0 0 auto;color:var(--btn-ink)}
+.hlink .hic svg{width:100%;height:100%}
+.hlink .htx{flex:1;min-width:0}
+.hlink .ht{font-family:var(--head-font);font-size:13px;letter-spacing:.07em}
+.hlink .hs{font-size:10px;letter-spacing:.12em;color:rgba(255,255,255,.5);font-weight:600;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hlink .hchev{width:20px;height:20px;color:rgba(255,255,255,.4);flex:0 0 auto}
+.hub-foot{text-align:center;margin-top:36px;font-size:10px;letter-spacing:.28em;text-indent:.28em;color:rgba(255,255,255,.35);font-weight:600}
+#npbar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;align-items:center;gap:10px;
+  padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(8,8,11,.97);
+  border-top:2px solid var(--btn-ink);transform:translateY(110%);transition:transform .3s ease}
+#npbar.show{transform:translateY(0)}
+#npcov{width:44px;height:44px;border-radius:8px;object-fit:cover;flex:0 0 auto;background:#1a1a20}
+.npmeta{flex:1;min-width:0}
+#npt{font-family:var(--head-font);font-size:12px;letter-spacing:.05em;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#nps{font-size:10px;letter-spacing:.14em;color:rgba(255,255,255,.55);font-weight:600;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.npbtn{width:42px;height:42px;border-radius:50%;border:1.5px solid var(--btn-ink);background:none;color:var(--btn-ink);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex:0 0 auto}
+.npbtn svg{width:17px;height:17px}
+#hubplayer{position:fixed;right:0;bottom:0;width:8px;height:8px;opacity:.01;pointer-events:none;z-index:1}
+
 </style>
 </head>
 <body data-shell="atomic">
@@ -618,7 +676,43 @@ body.theater #fsexit{display:flex}
     </div>
     <div id="speaker"></div>
   </div>
+  <div id="scrollcue"><span>SCROLL</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l7 7 7-7"/></svg></div>
 </div>
+
+<section id="hub">
+  <div class="hub-kicker">A$AP ANT · POCKET PLAYER</div>
+  <h2 class="hub-h">MUSIC</h2>
+  <p class="hub-sub">12 TAPES · 175 TRACKS — TAP A TAPE, HIT PLAY</p>
+  <div id="tapes"></div>
+  <h2 class="hub-h">STREAM</h2>
+  <p class="hub-sub">HIS MUSIC, EVERYWHERE</p>
+  <div class="svc-grid">
+    <a class="svc" href="https://www.youtube.com/@marinoinfantry" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2.5" y="6" width="19" height="12" rx="3.5"/><path d="M10.5 9.8v4.4L14.5 12z" fill="currentColor" stroke="none"/></svg>
+      <span>YOUTUBE</span><small>@MARINOINFANTRY</small>
+    </a>
+    <a class="svc" href="https://soundcloud.com/ygaddie" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 16.5v-3M6 17.5V9M9 17.5v-5"/><path d="M11.5 17.5h5.8a3.2 3.2 0 0 0 .6-6.34 4.7 4.7 0 0 0-9.2 1.1 2.6 2.6 0 0 0 2.8 5.24z"/></svg>
+      <span>SOUNDCLOUD</span><small>@YGADDIE</small>
+    </a>
+    <a class="svc" href="https://ffm.to/all-so-simple" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 14a5 5 0 0 0 7.1 0l2.8-2.8a5 5 0 0 0-7.1-7.1l-1.6 1.6"/><path d="M14 10a5 5 0 0 0-7.1 0l-2.8 2.8a5 5 0 0 0 7.1 7.1l1.6-1.6"/></svg>
+      <span>ALL PLATFORMS</span><small>SPOTIFY · APPLE · TIDAL</small>
+    </a>
+  </div>
+  <h2 class="hub-h">LINKS</h2>
+  <p class="hub-sub">EVERYTHING ELSE, ONE TAP</p>
+  <div id="hublinks"></div>
+  <div class="hub-foot">© 2026 MARINO INFANTRY · ASAPANT.COM</div>
+</section>
+
+<div id="npbar" aria-hidden="true">
+  <img id="npcov" alt="">
+  <div class="npmeta"><div id="npt"></div><div id="nps"></div></div>
+  <button class="npbtn" id="npplay" aria-label="Pause"></button>
+  <button class="npbtn" id="npclose" aria-label="Stop"></button>
+</div>
+<div id="hubplayer"></div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
@@ -1031,6 +1125,21 @@ function onYouTubeIframeAPIReady(){
       }
     }
   });
+  /* hidden audio player for the hub tracklists — plays YouTube audio while scrolling */
+  try{
+    hubPlayer=new YT.Player('hubplayer',{
+      width:'8',height:'8',
+      playerVars:{ autoplay:0, controls:0, disablekb:1, fs:0, iv_load_policy:3, modestbranding:1, playsinline:1, rel:0 },
+      events:{
+        onReady:()=>{ hubReady=true; },
+        onStateChange:(e)=>{
+          if(e.data===YT.PlayerState.PLAYING){ hubPaused=false; syncNpIcon(); }
+          else if(e.data===YT.PlayerState.PAUSED){ hubPaused=true; syncNpIcon(); }
+          else if(e.data===YT.PlayerState.ENDED){ hubNext(); }
+        }
+      }
+    });
+  }catch(e){}
 }
 
 /* ================= SCREEN ================= */
@@ -1069,6 +1178,7 @@ function updateSoundHint(){
   soundhint.classList.toggle('show', power && muted);
 }
 function loadCurrent(){
+  hubStop();
   const c=CARTS[cart], isLinks=(cart===2);
   if(!playerReady||!player) return;
   try{
@@ -1369,7 +1479,7 @@ bindAB('a-b',()=>{
 },1700);
 bindAB('a-x',()=>{
   if(!power||!playerReady||!player) return;
-  try{ paused?player.playVideo():player.pauseVideo(); paused=!paused; }catch(e){}
+  try{ if(paused){ hubStop(); player.playVideo(); } else player.pauseVideo(); paused=!paused; }catch(e){}
   refreshButtons();
 },1300);
 bindAB('a-y',()=>{
@@ -1556,6 +1666,7 @@ function musicBack(){
   refreshButtons();
 }
 function playTrackVideo(a,t){
+  hubStop();
   const tr=ALBUMS[a].tracks[t];
   if(!tr.video) return;
   musPlaying={a:a,t:t,video:tr.video};
@@ -1591,6 +1702,127 @@ function musicVideoBack(){
   renderMusic(); musicEl.classList.add('show'); click(1500);
   refreshButtons();
 }
+/* ================= HUB: ALL MY LINKS =================
+   Scrollable section below the device: Apple-Music-style tape library with
+   YouTube-audio playback, streaming service buttons, and link rows. */
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+const HUBIC={
+  chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>',
+  ext:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M14 4h6v6M20 4l-9 9"/><path d="M19 13.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5.5"/></svg>',
+  x:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1.6 2H8l4.4 5.9L18.9 2zm-1.1 17.8h1.7L7.1 3.9H5.3l12.5 16z"/></svg>',
+  close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>'
+};
+/* streaming profiles verified 2026-10-06: YouTube @marinoinfantry via oEmbed
+   (uploader of HUEY P IN HELLCAT); SoundCloud /ygaddie from his official
+   video descriptions; ffm.to/all-so-simple is his IG-bio smart link.
+   Spotify/Apple/Tidal/Audiomack artist URLs were truncated in every source —
+   not hardcoded; the smart link covers them. */
+const HUBLINKS=[
+  {title:'INSTAGRAM', sub:'@YGADDIE', url:'https://instagram.com/ygaddie', icon:'cam'},
+  {title:'YOUTUBE', sub:'@MARINOINFANTRY', url:'https://www.youtube.com/@marinoinfantry', icon:'yt'},
+  {title:'X / TWITTER', sub:'@YGADDIE', url:'https://twitter.com/ygaddie', icon:'x'},
+  {title:'MARINO INFANTRY', sub:'SHOP · INFANTRYSKATE.COM', url:'https://infantryskate.com', icon:'bag'},
+  {title:'BOOKING', sub:'YGADDIEBOOKINGS@YAHOO.COM', url:'mailto:YGADDIEBOOKINGS@YAHOO.COM', icon:'mail'},
+  {title:'ALL SO SIMPLE', sub:'STREAM EVERYWHERE', url:'https://ffm.to/all-so-simple', icon:'stream'},
+];
+const HUB_LINK_ICONS={ cam:IC.cam, bag:IC.bag, mail:IC.mail, stream:IC.stream, x:HUBIC.x,
+  yt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2.5" y="6" width="19" height="12" rx="3.5"/><path d="M10.5 9.8v4.4L14.5 12z" fill="currentColor" stroke="none"/></svg>' };
+function renderHub(){
+  document.getElementById('tapes').innerHTML=ALBUMS.map((al,a)=>
+    '<div class="tape" data-a="'+a+'">'+
+    '<button class="tape-head" data-a="'+a+'" aria-expanded="false" aria-label="Open '+esc(al.title)+'">'+
+      '<img class="tcov" src="'+al.cover+'" alt="" loading="lazy">'+
+      '<span class="ttx"><span class="tt">'+esc(al.title)+'</span>'+
+      '<span class="tm">'+al.tracks.length+' TRACKS · '+esc(al.artist)+'</span></span>'+
+      '<span class="tchev">'+HUBIC.chev+'</span>'+
+    '</button>'+
+    '<div class="tracks">'+al.tracks.map((tr,t)=>{
+      const inner='<span class="tplay">'+(tr.video?BIC.play:HUBIC.ext)+'</span>'+
+        '<span class="tn">'+esc(tr.t)+'</span><span class="td">'+esc(tr.d)+'</span>';
+      return tr.video
+        ? '<div class="trk" data-a="'+a+'" data-t="'+t+'" role="button" tabindex="0" aria-label="Play '+esc(tr.t)+'">'+inner+'</div>'
+        : '<a class="trk" href="'+al.stream+'" target="_blank" rel="noopener" aria-label="Stream '+esc(tr.t)+'">'+inner+'</a>';
+    }).join('')+'</div></div>').join('');
+  document.getElementById('hublinks').innerHTML=HUBLINKS.map(l=>
+    '<a class="hlink" href="'+l.url+'" target="_blank" rel="noopener">'+
+    '<span class="hic">'+HUB_LINK_ICONS[l.icon]+'</span>'+
+    '<span class="htx"><span class="ht">'+l.title+'</span><span class="hs">'+esc(l.sub)+'</span></span>'+
+    '<span class="hchev">'+HUBIC.chev+'</span></a>').join('');
+  document.getElementById('npclose').innerHTML=HUBIC.close;
+}
+document.getElementById('tapes').addEventListener('click',e=>{
+  const head=e.target.closest('.tape-head');
+  if(head){ toggleTape(+head.dataset.a); return; }
+  const row=e.target.closest('.trk[data-a]');
+  if(row && !e.target.closest('a')) hubPlay(+row.dataset.a,+row.dataset.t);
+});
+document.getElementById('tapes').addEventListener('keydown',e=>{
+  if(e.key!=='Enter'&&e.key!==' ') return;
+  const row=e.target.closest('.trk[data-a]');
+  if(row){ e.preventDefault(); hubPlay(+row.dataset.a,+row.dataset.t); }
+});
+function toggleTape(a){
+  click(1500);
+  document.querySelectorAll('.tape').forEach(el=>{
+    const on=+el.dataset.a===a&&!el.classList.contains('open');
+    el.classList.toggle('open',on);
+    el.querySelector('.tape-head').setAttribute('aria-expanded',on?'true':'false');
+  });
+}
+/* ---- hub audio: hidden YouTube player, now-playing bar ---- */
+let hubPlayer=null, hubReady=false, hubNow=null, hubPaused=false;
+function syncNpIcon(){
+  const b=document.getElementById('npplay');
+  if(b) b.innerHTML=hubPaused?BIC.play:BIC.pause;
+}
+function hubStop(){
+  hubNow=null; hubPaused=false;
+  try{ if(hubPlayer) hubPlayer.stopVideo(); }catch(e){}
+  document.getElementById('npbar').classList.remove('show');
+  document.getElementById('npbar').setAttribute('aria-hidden','true');
+  document.querySelectorAll('.trk.playing').forEach(el=>el.classList.remove('playing'));
+}
+function hubPlay(a,t){
+  const al=ALBUMS[a], tr=al&&al.tracks[t];
+  if(!tr||!tr.video) return;
+  try{ if(playerReady&&player) player.pauseVideo(); }catch(e){}
+  paused=true; try{ refreshButtons(); }catch(e){}
+  hubNow={a:a,t:t,video:tr.video,title:tr.t,tape:al.title,cover:al.cover};
+  hubPaused=false;
+  const go=()=>{ try{ hubPlayer.loadVideoById(tr.video); }catch(e){} hubShowNp(); };
+  if(hubReady&&hubPlayer) go();
+  else{ const iv=setInterval(()=>{ if(hubReady&&hubPlayer){ clearInterval(iv); go(); } },250);
+        setTimeout(()=>clearInterval(iv),8000); }
+}
+function hubShowNp(){
+  if(!hubNow) return;
+  document.getElementById('npcov').src=hubNow.cover;
+  document.getElementById('npt').textContent=hubNow.title;
+  document.getElementById('nps').textContent=hubNow.tape;
+  syncNpIcon();
+  document.getElementById('npbar').classList.add('show');
+  document.getElementById('npbar').setAttribute('aria-hidden','false');
+  document.querySelectorAll('.trk.playing').forEach(el=>el.classList.remove('playing'));
+  const row=document.querySelector('.trk[data-a="'+hubNow.a+'"][data-t="'+hubNow.t+'"]');
+  if(row){ row.classList.add('playing'); }
+  click(2000);
+}
+function hubToggle(){
+  if(!hubNow||!hubPlayer) return;
+  try{ if(hubPaused) hubPlayer.playVideo(); else hubPlayer.pauseVideo(); }catch(e){}
+}
+function hubNext(){
+  if(!hubNow) return;
+  const trs=ALBUMS[hubNow.a].tracks;
+  for(let k=1;k<=trs.length;k++){
+    const t=(hubNow.t+k)%trs.length;
+    if(trs[t].video){ hubPlay(hubNow.a,t); return; }
+  }
+  hubStop();
+}
+document.getElementById('npplay').addEventListener('click',()=>{ click(1500); hubToggle(); });
+document.getElementById('npclose').addEventListener('click',()=>{ click(1200); hubStop(); });
+renderHub();
 /* ================= HELP OVERLAY ================= */
 const helpov=document.getElementById('helpov');
 let helpOpen=false;
@@ -1630,7 +1862,7 @@ screen.addEventListener('touchend',e=>{
   if(tx0===null||!power||theater||cart===2||menu||mus||musPlaying) return;
   const dx=e.changedTouches[0].clientX-tx0, dy=e.changedTouches[0].clientY-ty0;
   if(Math.abs(dx)>44&&Math.abs(dx)>Math.abs(dy)*1.4) nextItem(dx<0?1:-1);
-  else if(Math.abs(dy)>44&&Math.abs(dy)>Math.abs(dx)*1.4) nextCart(dy<0?1:-1);
+  else if(window.scrollY<24&&Math.abs(dy)>44&&Math.abs(dy)>Math.abs(dx)*1.4) nextCart(dy<0?1:-1);
   tx0=null;ty0=null;
 },{passive:true});
 /* tap screen = unmute when muted (first tap does the coin ritual) */
