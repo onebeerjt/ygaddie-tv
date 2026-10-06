@@ -225,6 +225,62 @@ body[data-shell="toxic"]{
 #confirm .cf-q{font-size:11px;letter-spacing:.1em;margin-bottom:3px}
 #confirm .cf-t{font-size:10px;opacity:.88;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 @media (prefers-reduced-motion: reduce){#confirm.show{animation:none}}
+/* ============ VIDEO THEATER MODE ============
+   CSS-first fullscreen: works on iOS Safari, which has no Fullscreen API
+   for arbitrary elements. The native API is layered on as progressive
+   enhancement. The iframe never moves in the DOM, so playback never
+   restarts or loses its place. */
+/* transparent tap layer over the video: single tap = unmute ritual,
+   double-tap = theater toggle. only alive during plain video playback */
+#vidtap{position:absolute;inset:0;z-index:4;display:none;cursor:pointer}
+#vidtap.on{display:block}
+/* fullscreen-enter: small expand glyph, top-right below the help button */
+#fsenter{position:absolute;top:46px;right:10px;z-index:25;display:none;
+  width:34px;height:34px;border-radius:50%;cursor:pointer;
+  background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.4);
+  align-items:center;justify-content:center;padding:0}
+#fsenter.on{display:flex}
+#fsenter svg{width:16px;height:16px}
+/* theater: the screen fills the viewport. #gb keeps container-type:inline-size
+   which would trap position:fixed descendants, so it is reset here.
+   visibility (not opacity) hides the device because children can escape it. */
+body.theater #gb{visibility:hidden;container-type:normal}
+body.theater #screen{
+  visibility:visible;position:fixed;inset:0;z-index:10000;
+  border-radius:0;box-shadow:none;
+  animation:theaterIn .34s cubic-bezier(.2,1.25,.4,1);
+}
+@keyframes theaterIn{from{transform:scale(.84);opacity:.35}}
+/* pure video: hide the CRT dressing + chrome in theater */
+body.theater #scan,body.theater #glass,body.theater #screentint,
+body.theater #nowbar,body.theater #osd,body.theater #soundhint,
+body.theater #fsenter,body.theater #helpbtn{display:none}
+/* exiting: shrink back into the device */
+#screen.theater-exit{
+  visibility:visible;position:fixed;inset:0;z-index:10000;
+  border-radius:0;box-shadow:none;
+  animation:theaterOut .3s cubic-bezier(.5,0,.7,.4) forwards;
+}
+@keyframes theaterOut{to{transform:scale(.82);opacity:0}}
+body.theater-out #gb{visibility:hidden;container-type:normal}
+/* theater chrome: floating exit control + transient hint */
+#fsexit{position:absolute;top:calc(12px + env(safe-area-inset-top));right:12px;z-index:30;
+  display:none;width:40px;height:40px;border-radius:50%;cursor:pointer;
+  background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.45);
+  align-items:center;justify-content:center;padding:0}
+#fsexit svg{width:18px;height:18px}
+body.theater #fsexit{display:flex}
+#exithint{position:absolute;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));
+  transform:translateX(-50%);z-index:30;display:none;white-space:nowrap;
+  font-family:var(--body-font);font-size:10px;letter-spacing:.26em;color:#fff;
+  background:rgba(0,0,0,.66);border:1px solid rgba(255,255,255,.35);
+  border-radius:999px;padding:9px 16px;pointer-events:none}
+#exithint.show{display:block;animation:hintfade 2.4s ease forwards}
+@keyframes hintfade{0%{opacity:0}12%{opacity:1}78%{opacity:1}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){
+  body.theater #screen,#screen.theater-exit{animation:none}
+  #exithint.show{animation:none;opacity:1}
+}
 /* ============ LINK MENU — tile grid ============ */
 #linkmenu{position:absolute;inset:0;z-index:15;background:#0a0a0f;display:none;
   flex-direction:column;justify-content:flex-start;padding:7% 7% 5%;gap:8px;overflow:hidden}
@@ -491,6 +547,7 @@ body[data-shell="toxic"]{
           <div class="hrow"><b class="hics" id="h-y"></b><span>Sound on / muted</span></div>
           <div class="hrow"><b>START</b><span>Menu · videos / music / links</span></div>
           <div class="hrow"><b>SELECT</b><span>Shell color</span></div>
+          <div class="hrow"><b>DOUBLE-TAP VIDEO</b><span>Fullscreen · double-tap to exit</span></div>
           <div class="hclose">B OR TAP OUTSIDE TO CLOSE</div>
           </div>
         </div>
@@ -505,6 +562,10 @@ body[data-shell="toxic"]{
         </div>
         <div id="soundhint">TAP FOR SOUND</div>
         <div id="confirm" aria-live="polite"><div class="cf-q" id="confirmQ"></div><div class="cf-t" id="confirmT"></div></div>
+        <div id="vidtap"></div>
+        <button id="fsenter" aria-label="Watch fullscreen"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+        <button id="fsexit" aria-label="Exit fullscreen"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg></button>
+        <div id="exithint">DOUBLE-TAP TO EXIT</div>
         <div id="boot" role="button" aria-label="Power on">
           <div class="blogo">MARINO<br>INFANTRY</div>
           <div class="bsub">POCKET PLAYER</div>
@@ -913,6 +974,7 @@ function refreshButtons(){
   setBtnIcon('a-b','back','Back');
   setBtnIcon('a-x',paused?'play':'pause',paused?'Play':'Pause');
   setBtnIcon('a-y',muted?'mute':'snd',muted?'Unmute':'Mute');
+  updateVideoChrome();
 }
 /* help overlay shows the real icons, not letters */
 document.getElementById('h-a').innerHTML=BIC.next+BIC.check;
@@ -1133,6 +1195,109 @@ function videoNav(d){
   if(confirmDir===d){ hideConfirm(); nextItem(d); }
   else showConfirm(d);
 }
+/* ================= VIDEO THEATER MODE =================
+   CSS-first fullscreen (works on iOS Safari); the native Fullscreen API
+   is layered on as progressive enhancement where available.
+   The iframe never moves in the DOM, so playback never restarts. */
+let theater=false, theaterNative=false;
+const vidtap=document.getElementById('vidtap'),
+      fsenter=document.getElementById('fsenter'),
+      fsexit=document.getElementById('fsexit'),
+      exithint=document.getElementById('exithint');
+/* theater is allowed whenever a video owns the screen (incl. track videos) */
+function theaterEligible(){ return power && !menu && !mus && cart!==2; }
+function updateVideoChrome(){
+  const el=theaterEligible();
+  vidtap.classList.toggle('on', el);
+  fsenter.classList.toggle('on', el && !theater);
+}
+function enterTheater(){
+  if(theater||!theaterEligible()) return;
+  theater=true;
+  hideConfirm();
+  document.body.classList.add('theater');
+  screen.classList.remove('theater-exit');
+  document.body.classList.remove('theater-out');
+  /* progressive enhancement: native fullscreen where supported.
+     iPhone Safari has no Fullscreen API for arbitrary elements — the CSS
+     mode above is the universal path and works regardless. */
+  try{
+    if(screen.requestFullscreen){ const p=screen.requestFullscreen(); if(p&&p.catch) p.catch(()=>{}); }
+    else if(screen.webkitRequestFullscreen){ screen.webkitRequestFullscreen(); }
+  }catch(e){}
+  updateVideoChrome();
+  exithint.classList.remove('show'); void exithint.offsetWidth; exithint.classList.add('show');
+  clearTimeout(exithint._t); exithint._t=setTimeout(()=>exithint.classList.remove('show'),2500);
+  click(1800);
+  try{if(navigator.vibrate) navigator.vibrate(10);}catch(e){}
+}
+function exitTheater(){
+  if(!theater) return;
+  theater=false;
+  const wasNative=theaterNative; theaterNative=false;
+  try{
+    if(document.fullscreenElement) document.exitFullscreen();
+    else if(document.webkitFullscreenElement) document.webkitExitFullscreen();
+  }catch(e){}
+  /* native exits are animated by the browser — clean up instantly.
+     pure-CSS mode gets our shrink-back-into-the-device animation. */
+  cssTheaterExit(!wasNative);
+}
+function cssTheaterExit(animate){
+  if(!document.body.classList.contains('theater')&&!document.body.classList.contains('theater-out')) return;
+  document.body.classList.remove('theater');
+  exithint.classList.remove('show');
+  clearTimeout(exithint._t);
+  if(animate){
+    document.body.classList.add('theater-out');
+    screen.classList.add('theater-exit');
+  }
+  updateVideoChrome();
+  click(1500);
+}
+/* keep the CSS state in sync with native fullscreen (Escape key, race where
+   native engages after we already exited, etc.) */
+function onFsChange(){
+  const fs=document.fullscreenElement||document.webkitFullscreenElement;
+  if(fs){
+    if(theater) theaterNative=true;
+    else{ try{ if(document.exitFullscreen) document.exitFullscreen(); else document.webkitExitFullscreen(); }catch(e){} }
+  }
+  else if(theater) exitTheater();
+  else cssTheaterExit(false);
+}
+document.addEventListener('fullscreenchange',onFsChange);
+document.addEventListener('webkitfullscreenchange',onFsChange);
+screen.addEventListener('animationend',e=>{
+  if(e.animationName==='theaterOut'){
+    screen.classList.remove('theater-exit');
+    document.body.classList.remove('theater-out');
+  }
+});
+/* tap layer over the video: single tap = unmute ritual, double-tap = theater.
+   (Taps land here instead of the cross-origin YouTube iframe, which swallows
+   them.) In theater mode the layer stays up so double-tap exits. */
+let vidTapLast=0, vidTapT=null;
+function singleVidTap(){
+  if(theater) return;
+  if(!power||!muted) return;
+  if(soundLocked) unlockSound(); else unmute();
+}
+vidtap.addEventListener('click',e=>{
+  e.stopPropagation();
+  const now=Date.now();
+  if(now-vidTapLast<350){
+    vidTapLast=0; clearTimeout(vidTapT);
+    if(theater) exitTheater();
+    else if(power&&!muted&&theaterEligible()) enterTheater();
+    else singleVidTap();
+    return;
+  }
+  vidTapLast=now; clearTimeout(vidTapT);
+  vidTapT=setTimeout(()=>{ vidTapLast=0; singleVidTap(); },360);
+});
+fsenter.addEventListener('click',e=>{ e.stopPropagation(); enterTheater(); });
+fsexit.addEventListener('click',e=>{ e.stopPropagation(); exitTheater(); });
 /* PRESS ANY BUTTON ritual: first control press unmutes with a coin chime */
 function unlockSound(){
   if(!soundLocked||!power) return;
@@ -1180,6 +1345,7 @@ function bindAB(id,fn,f){
 bindAB('a-a',()=>{ if(!power) return; if(menu){ menuSelect(); return; } if(mus){ musicSelect(); return; } if(musPlaying){ trackVideoNext(1); return; } if(cart===2){ openLink(); return; } videoNav(1); },2100);
 bindAB('a-b',()=>{
   if(!power) return;
+  if(theater){ exitTheater(); return; }
   if(helpOpen){ setHelp(false); return; }
   if(menu){ menuBack(); return; }
   if(mus){ musicBack(); return; }
@@ -1423,15 +1589,16 @@ helpov.addEventListener('click',e=>{ if(e.target===helpov) setHelp(false); });
 /* ================= KEYBOARD + SWIPE ================= */
 document.addEventListener('keydown',e=>{
   const k=e.key.toLowerCase();
+  if(k==='escape'){ if(theater) exitTheater(); return; }
   if(k==='arrowleft'){ if(menu) menuNav(-1); else if(mus) musicNav(-1); else if(musPlaying) trackVideoNext(-1); else nextItem(-1); }
   else if(k==='arrowright'){ if(menu) menuNav(1); else if(mus) musicNav(1); else if(musPlaying) trackVideoNext(1); else nextItem(1); }
-  else if(k==='arrowup'){ if(menu) menuNav(-1); else if(mus) musicNav(-1); else nextCart(-1); }
-  else if(k==='arrowdown'){ if(menu) menuNav(1); else if(mus) musicNav(1); else nextCart(1); }
+  else if(k==='arrowup'){ if(theater) return; if(menu) menuNav(-1); else if(mus) musicNav(-1); else nextCart(-1); }
+  else if(k==='arrowdown'){ if(theater) return; if(menu) menuNav(1); else if(mus) musicNav(1); else nextCart(1); }
   else if(k==='a') document.getElementById('a-a').click();
   else if(k==='b') document.getElementById('a-b').click();
   else if(k==='x') document.getElementById('a-x').click();
   else if(k==='y') document.getElementById('a-y').click();
-  else if(k==='m'){ if(power){ if(mus) closeMusic(); else if(musPlaying) musicVideoBack(); else if(menu) closeMenu(); else openMenu(); } }
+  else if(k==='m'){ if(theater){ exitTheater(); } else if(power){ if(mus) closeMusic(); else if(musPlaying) musicVideoBack(); else if(menu) closeMenu(); else openMenu(); } }
   else if(k==='enter') powerOn();
 });
 let tx0=null,ty0=null;
@@ -1446,7 +1613,7 @@ musicEl.addEventListener('touchend',e=>{
 },{passive:true});
 screen.addEventListener('touchstart',e=>{tx0=e.touches[0].clientX;ty0=e.touches[0].clientY;},{passive:true});
 screen.addEventListener('touchend',e=>{
-  if(tx0===null||!power||cart===2||menu||mus||musPlaying) return;
+  if(tx0===null||!power||theater||cart===2||menu||mus||musPlaying) return;
   const dx=e.changedTouches[0].clientX-tx0, dy=e.changedTouches[0].clientY-ty0;
   if(Math.abs(dx)>44&&Math.abs(dx)>Math.abs(dy)*1.4) nextItem(dx<0?1:-1);
   else if(Math.abs(dy)>44&&Math.abs(dy)>Math.abs(dx)*1.4) nextCart(dy<0?1:-1);
