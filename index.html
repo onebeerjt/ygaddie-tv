@@ -256,13 +256,9 @@ body[data-shell="toxic"]{
   transition:border-color .16s,box-shadow .16s}
 .album-tile .cover{aspect-ratio:1/1;width:100%;object-fit:cover;display:block;background:#1a1a22}
 .album-tile .cover-fb{aspect-ratio:1/1;width:100%;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,#2a1a4a,#0e2a3a);font-family:var(--head-font);
-  font-size:22px;color:#fff;letter-spacing:.06em;text-align:center;padding:10px}
-.album-tile .ainfo{padding:9px 4px 0;text-align:center}
-.album-tile .aname{font-family:var(--head-font);font-size:12px;color:#eee;letter-spacing:.05em;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.album-tile .ameta{font-family:var(--body-font);font-size:8.5px;letter-spacing:.2em;
-  color:rgba(255,255,255,.5);margin-top:4px}
+  background:linear-gradient(135deg,#2a1a4a,#0e2a3a)}
+.album-tile .cover-fb svg{width:36px;height:36px;stroke:rgba(255,255,255,.45);fill:none;
+  stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .album-tile.sel{transform:scale(1.05)}
 .album-tile.sel .covwrap{border-color:var(--accent);box-shadow:var(--glow),0 8px 22px rgba(0,0,0,.55)}
 .album-tile:active{transform:scale(1.06)}
@@ -272,8 +268,9 @@ body[data-shell="toxic"]{
   border-radius:6px;overflow:hidden;background:#1a1a22}
 #music .thead .cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 #music .thead .cover-fb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,#2a1a4a,#0e2a3a);font-family:var(--head-font);
-  font-size:8px;color:#fff;text-align:center;padding:2px}
+  background:linear-gradient(135deg,#2a1a4a,#0e2a3a)}
+#music .thead .cover-fb svg{width:18px;height:18px;stroke:rgba(255,255,255,.45);fill:none;
+  stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 #music .thead .tt{font-family:var(--head-font);font-size:15px;color:#fff;letter-spacing:.04em}
 #music .thead .ts{font-family:var(--body-font);font-size:8.5px;letter-spacing:.14em;
   color:rgba(255,255,255,.55);margin-top:2px}
@@ -293,6 +290,7 @@ body[data-shell="toxic"]{
 .track.sel .tname2{color:#fff}
 #music .mfoot{flex:0 0 auto;font-family:var(--body-font);font-size:9px;letter-spacing:.24em;
   color:rgba(255,255,255,.45);text-align:center;margin-top:8px}
+#music .mfoot .mnow{font-family:var(--head-font);font-size:11px;letter-spacing:.08em;color:#fff;margin-bottom:5px}
 /* stagger cascade on every view render */
 #menu .mitem,#music .album-tile,#music .track,#linkmenu .tile{
   animation:tilein .34s cubic-bezier(.2,1.2,.4,1) both;animation-delay:calc(var(--i,0)*45ms)}
@@ -1171,7 +1169,7 @@ let musPlaying=null; /* {a,t,video} while a track video owns the screen */
 function openMusic(){ mus={level:0,album:0}; renderMusic(); musicEl.classList.add('show'); click(1200); }
 function closeMusic(){ mus=null; musPlaying=null; musicEl.classList.remove('show'); }
 function coverBlock(a,wrapCls){
-  return '<div class="'+wrapCls+'"><div class="cover-fb">'+a.title+'</div>'+
+  return '<div class="'+wrapCls+'"><div class="cover-fb">'+IC.note+'</div>'+
     '<img class="cover" src="'+a.cover+'" alt="" onerror="this.remove()"></div>';
 }
 function renderMusic(){
@@ -1179,9 +1177,8 @@ function renderMusic(){
   if(mus.level===0){
     h='<div class="mhead">'+IC.note.replace('<svg','<svg class="mnote-ic"')+'MUSIC · PICK A TAPE</div><div class="shelf">'+
       ALBUMS.map((a,i)=>'<div class="album-tile'+(i===mus.album?' sel':'')+'" style="--i:'+i+'">'+
-        coverBlock(a,'covwrap')+
-        '<div class="ainfo"><div class="aname">'+a.title+'</div><div class="ameta">'+a.meta+'</div></div></div>').join('')+
-      '</div><div class="mfoot">D-PAD TOGGLES · A OPENS · B BACK</div>';
+        coverBlock(a,'covwrap')+'</div>').join('')+
+      '</div><div class="mfoot"><div class="mnow">'+ALBUMS[mus.album].title+'</div>D-PAD TOGGLES · A OPENS · B BACK</div>';
   }else{
     const a=ALBUMS[mus.album];
     h='<div class="mhead">MUSIC · '+a.title+'</div>'+
