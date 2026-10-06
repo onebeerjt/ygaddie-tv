@@ -213,6 +213,18 @@ body[data-shell="toxic"]{
   animation:hintpulse 1.4s ease-in-out infinite}
 #soundhint.show{display:flex}
 @keyframes hintpulse{50%{transform:translateX(-50%) scale(1.06)}}
+/* ============ POKéMON CONFIRM DIALOG — next/previous video ============ */
+#confirm{position:absolute;top:11%;left:4%;z-index:24;max-width:74%;display:none;
+  background:rgba(8,8,16,.95);border:2px solid #f4f1e4;border-radius:6px;
+  box-shadow:0 0 0 2px #080810, 0 8px 20px rgba(0,0,0,.55);
+  padding:8px 11px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color:#f4f1e4;pointer-events:none}
+#confirm.show{display:block;animation:cfpop .18s cubic-bezier(.3,1.6,.5,1)}
+#confirm.fade{opacity:0;transition:opacity .2s}
+@keyframes cfpop{from{transform:scale(.82);opacity:0}}
+#confirm .cf-q{font-size:11px;letter-spacing:.1em;margin-bottom:3px}
+#confirm .cf-t{font-size:10px;opacity:.88;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+@media (prefers-reduced-motion: reduce){#confirm.show{animation:none}}
 /* ============ LINK MENU — tile grid ============ */
 #linkmenu{position:absolute;inset:0;z-index:15;background:#0a0a0f;display:none;
   flex-direction:column;justify-content:flex-start;padding:7% 7% 5%;gap:8px;overflow:hidden}
@@ -347,7 +359,13 @@ body[data-shell="toxic"]{
 .pill button.pressed{transform:translateY(4px);
   box-shadow:0 1px 0 rgba(0,0,0,.55), inset 0 2px 4px rgba(0,0,0,.5)}
 .pill span{font-family:var(--body-font);font-size:8px;letter-spacing:.24em;color:var(--ink)}
-#shelltag{font-family:var(--body-font);font-size:8px;letter-spacing:.3em;color:var(--ink-dim)}
+.pill .psub{display:block;width:13px;height:13px;color:var(--ink-dim);opacity:.9;font-style:normal}
+.pill .psub svg{width:100%;height:100%;display:block}
+#shelltag{display:flex;align-items:center;justify-content:center;gap:6px;font-family:var(--body-font);font-size:8px;letter-spacing:.3em;color:var(--ink-dim)}
+#shelldot{width:8px;height:8px;border-radius:50%;background:#8a76c4;flex:none}
+/* mini button icons inside hint lines — icon language, not letters */
+.hbic{display:inline-flex;width:11px;height:11px;vertical-align:-1.5px;margin:0 1px}
+.hbic svg{width:100%;height:100%;display:block}
 /* --- ABXY: glossy domes, springy --- */
 #abxy{position:relative;width:33cqw;height:33cqw;margin:0 auto;
   filter:drop-shadow(0 7px 6px rgba(0,0,0,.5))}
@@ -486,6 +504,7 @@ body[data-shell="toxic"]{
           <div class="s" id="nows">ANT &amp; LORD FUBU FT. GOD ZEUS · NEW VIDEO</div>
         </div>
         <div id="soundhint">TAP FOR SOUND</div>
+        <div id="confirm" aria-live="polite"><div class="cf-q" id="confirmQ"></div><div class="cf-t" id="confirmT"></div></div>
         <div id="boot" role="button" aria-label="Power on">
           <div class="blogo">MARINO<br>INFANTRY</div>
           <div class="bsub">POCKET PLAYER</div>
@@ -510,10 +529,10 @@ body[data-shell="toxic"]{
       </div>
       <div id="midcol">
         <div class="pillrow">
-          <div class="pill"><button id="btnSelect" aria-label="Select"></button><span>SELECT</span></div>
-          <div class="pill"><button id="btnStart" aria-label="Start"></button><span>START</span></div>
+          <div class="pill"><button id="btnSelect" aria-label="Select: change shell color"></button><span>SELECT</span><i class="psub" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8.5"/><circle cx="9" cy="10" r="1.5" fill="currentColor" stroke="none"/><circle cx="14.8" cy="9.2" r="1.5" fill="currentColor" stroke="none"/><circle cx="15.6" cy="14.4" r="1.5" fill="currentColor" stroke="none"/><circle cx="10.4" cy="15.2" r="1.5" fill="currentColor" stroke="none"/></svg></i></div>
+          <div class="pill"><button id="btnStart" aria-label="Start: open menu"></button><span>START</span><i class="psub" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></i></div>
         </div>
-        <div id="shelltag">ATOMIC</div>
+        <div id="shelltag"><i id="shelldot"></i><span id="shellname">ATOMIC</span></div>
       </div>
       <div id="abxy" aria-label="Action buttons">
         <button class="abtn" id="a-y" data-btn="y" data-ickey="mute" aria-label="Mute"><span class="bic"><svg viewBox="0 0 24 24"><path d="M3.5 9.5v5H8l5.5 4.5v-14L8 9.5z" fill="currentColor"/><path d="M16.2 9.8l4.6 4.6m0-4.6l-4.6 4.6" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg></span></button>
@@ -536,6 +555,10 @@ const CARTS = [
   { name:'MUSIC VIDEOS', items:[
     { title:'HUEY P IN HELLCAT',     sub:'ANT & LORD FUBU FT. GOD ZEUS · NEW VIDEO',video:'y46k227vmSI' },
     { title:'UCONN FREESTYLE',       sub:'ANT & LORD FUBU FT. SODUH · LINK IN BIO',video:'NSK-9UcMrEM' },
+    { title:'COUNT PICCOLO',         sub:'ADDIE PITINO 2 · DIR. ARTHURLVZ',        video:'UaL0ziqQjjo' },
+    { title:'ONLY TRUST ME',         sub:'BACK ON GRID · ADDIE PITINO 2',          video:'0_H_zJmXFn4' },
+    { title:'ARM IN THE RIM',        sub:'FT. TONY SHHNOW · ADDIE PITINO 2',       video:'APsY6cXE4dU' },
+    { title:'4TH QUARTER',           sub:'PROD. POLARBWOY · ADDIE PITINO 2',       video:'z8f1wyUqdzs' },
     { title:'TESTAROSSA',            sub:'YGADDIE ft. Hoodrich Pablo & Offset',   video:'YlqHQJjqaw0' },
     { title:'MARINO PARIS · CH. 2',  sub:'ANT & LORD FUBU FT. JMK$',              video:'DbI_ZDw3jxg' },
     { title:'GOYARD UMBRELLA',       sub:'OFFICIAL VIDEO',                        video:'z0fC-hB_7H0' },
@@ -569,7 +592,7 @@ const ALBUMS=[
 {
   title:'ALL SO SIMPLE', artist:'A$AP ANT & LORD FUBU', year:'2026',
   meta:'15 TRACKS · PROD. LORD FUBU',
-  cover:'https://respecta.is/uploads/posts/2026-05/thumbs/1779206391_asapant-ass.jpg',
+  cover:'https://cdn-images.dzcdn.net/images/cover/faad90874eaf258cd00950531c7316b7/1000x1000-000000-80-0-0.jpg',
   stream:'https://ffm.to/all-so-simple',
   tracks:[
     {t:'PONZU SAUCE',d:'1:37'},
@@ -592,7 +615,7 @@ const ALBUMS=[
 {
   title:'ENTER THE INFANTRY, VOL. 2', artist:'MARINO INFANTRY', year:'2025',
   meta:'25 TRACKS · COMPILATION',
-  cover:'https://cdn-images.dzcdn.net/images/cover/422cd90d6d5ade28d1f241439199a79c/500x500-000000-80-0-0.jpg',
+  cover:'https://cdn-images.dzcdn.net/images/cover/422cd90d6d5ade28d1f241439199a79c/1000x1000-000000-80-0-0.jpg',
   stream:'https://www.deezer.com/album/242203172',
   tracks:[
     {t:'NEW AGE OUTLAWS FT. A$AP ANT & BABY 9ENO',d:'1:52'},
@@ -625,7 +648,7 @@ const ALBUMS=[
 {
   title:'ADDIE PITINO 2', artist:'A$AP ANT', year:'2025',
   meta:'17 TRACKS',
-  cover:'https://cdn-images.dzcdn.net/images/cover/bf784dd01c8c94ee2797c867681d622d/500x500-000000-80-0-0.jpg',
+  cover:'https://cdn-images.dzcdn.net/images/cover/bf784dd01c8c94ee2797c867681d622d/1000x1000-000000-80-0-0.jpg',
   stream:'https://www.deezer.com/album/740210411',
   tracks:[
     {t:'DON CARLO (OFF THE GRID',d:'2:53'},
@@ -650,7 +673,7 @@ const ALBUMS=[
 {
   title:'LIL BLACK JEAN JACKET 3', artist:'A$AP ANT', year:'2022',
   meta:'16 TRACKS',
-  cover:'https://cdn-images.dzcdn.net/images/cover/efab97706ff379593fedb3cdeb606cf5/500x500-000000-80-0-0.jpg',
+  cover:'https://cdn-images.dzcdn.net/images/cover/efab97706ff379593fedb3cdeb606cf5/1000x1000-000000-80-0-0.jpg',
   stream:'https://www.deezer.com/album/310208837',
   tracks:[
     {t:'BOSS DECISIONS',d:'1:53'},
@@ -674,7 +697,7 @@ const ALBUMS=[
 {
   title:'LIL BLACK JEAN JACKET 2 (RUBY EDITION)', artist:'A$AP ANT', year:'2020',
   meta:'17 TRACKS',
-  cover:'https://cdn-images.dzcdn.net/images/cover/902bc5e40d3c005f25cb849b39dc05f6/500x500-000000-80-0-0.jpg',
+  cover:'https://cdn-images.dzcdn.net/images/cover/902bc5e40d3c005f25cb849b39dc05f6/1000x1000-000000-80-0-0.jpg',
   stream:'https://www.deezer.com/album/262714962',
   tracks:[
     {t:'MAX CONTRACT',d:'2:01'},
@@ -699,7 +722,7 @@ const ALBUMS=[
 {
   title:'I AM UNDERGROUND', artist:'A$AP ANT', year:'2020',
   meta:'7 TRACKS · EP',
-  cover:'https://cdn-images.dzcdn.net/images/cover/65fde3702a4bfb5168bb50ca0ac2346b/500x500-000000-80-0-0.jpg',
+  cover:'https://cdn-images.dzcdn.net/images/cover/65fde3702a4bfb5168bb50ca0ac2346b/1000x1000-000000-80-0-0.jpg',
   stream:'https://www.deezer.com/album/262704932',
   tracks:[
     {t:'BUSSIN\' SCRIPTS',d:'3:36'},
@@ -714,7 +737,7 @@ const ALBUMS=[
 {
   title:'ENTER THE INFANTRY', artist:'MARINO INFANTRY', year:'2019',
   meta:'25 TRACKS · COMPILATION',
-  cover:'https://cdn-images.dzcdn.net/images/cover/b57a06cc401d16f6abf50db7ac620e2b/500x500-000000-80-0-0.jpg',
+  cover:'https://cdn-images.dzcdn.net/images/cover/b57a06cc401d16f6abf50db7ac620e2b/1000x1000-000000-80-0-0.jpg',
   stream:'https://www.deezer.com/album/122801862',
   tracks:[
     {t:'AUSTIN POWERS',d:'2:22'},
@@ -747,7 +770,7 @@ const ALBUMS=[
 {
   title:'ADDIE IZZO', artist:'A$AP ANT', year:'2019',
   meta:'5 TRACKS · EP',
-  cover:'https://cdn-images.dzcdn.net/images/cover/ed513736d7ed4908c1dc546ef4c6b6fe/500x500-000000-80-0-0.jpg',
+  cover:'https://cdn-images.dzcdn.net/images/cover/ed513736d7ed4908c1dc546ef4c6b6fe/1000x1000-000000-80-0-0.jpg',
   stream:'https://www.deezer.com/album/262700262',
   tracks:[
     {t:'DOG DAY AFTERNOON',d:'2:51'},
@@ -760,7 +783,7 @@ const ALBUMS=[
 {
   title:'ADDIE PITINO', artist:'A$AP ANT', year:'2019',
   meta:'11 TRACKS',
-  cover:'https://cdn-images.dzcdn.net/images/cover/9db805066bfe538dbbd720706a25d687/500x500-000000-80-0-0.jpg',
+  cover:'https://cdn-images.dzcdn.net/images/cover/9db805066bfe538dbbd720706a25d687/1000x1000-000000-80-0-0.jpg',
   stream:'https://www.deezer.com/album/262708582',
   tracks:[
     {t:'NO CLOUT CHASIN FT. LULU P',d:'2:16'},
@@ -779,7 +802,7 @@ const ALBUMS=[
 {
   title:'THE INTERLUDE', artist:'A$AP ANT', year:'2018',
   meta:'17 TRACKS',
-  cover:'https://cdn-images.dzcdn.net/images/cover/c04e112a224459743639314f7004feb8/500x500-000000-80-0-0.jpg',
+  cover:'https://cdn-images.dzcdn.net/images/cover/c04e112a224459743639314f7004feb8/1000x1000-000000-80-0-0.jpg',
   stream:'https://www.deezer.com/album/262714982',
   tracks:[
     {t:'SHAKA JAILCALL',d:'1:28'},
@@ -804,7 +827,7 @@ const ALBUMS=[
 {
   title:'LIL BLACK JEAN JACKET', artist:'A$AP ANT', year:'2018',
   meta:'13 TRACKS',
-  cover:'https://cdn-images.dzcdn.net/images/cover/51265c9778701186b82218ea7cf03778/500x500-000000-80-0-0.jpg',
+  cover:'https://cdn-images.dzcdn.net/images/cover/51265c9778701186b82218ea7cf03778/1000x1000-000000-80-0-0.jpg',
   stream:'https://www.deezer.com/album/262708642',
   tracks:[
     {t:'LUCKY CHARMS',d:'1:09'},
@@ -825,7 +848,7 @@ const ALBUMS=[
 {
   title:'THE PRELUDE', artist:'A$AP ANT', year:'2018',
   meta:'7 TRACKS · EP',
-  cover:'https://cdn-images.dzcdn.net/images/cover/2858b760abbbb7f3e860831086520d20/500x500-000000-80-0-0.jpg',
+  cover:'https://cdn-images.dzcdn.net/images/cover/2858b760abbbb7f3e860831086520d20/1000x1000-000000-80-0-0.jpg',
   stream:'https://www.deezer.com/album/262699112',
   tracks:[
     {t:'ACNE JEANS FT. LULU',d:'2:18',video:'u-ZYIsD0tIM'},
@@ -859,6 +882,8 @@ const BIC={
   snd:'<svg viewBox="0 0 24 24"><path d="M3.5 9.5v5H8l5.5 4.5v-14L8 9.5z" fill="currentColor"/><path d="M16 9.2a4.4 4.4 0 010 5.6M18.4 7a7.4 7.4 0 010 10" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg>',
   mute:'<svg viewBox="0 0 24 24"><path d="M3.5 9.5v5H8l5.5 4.5v-14L8 9.5z" fill="currentColor"/><path d="M16.2 9.8l4.6 4.6m0-4.6l-4.6 4.6" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg>'
 };
+/* mini inline button icon for hint lines — icon language, never letters */
+function hbic(k){ return '<span class="hbic">'+BIC[k]+'</span>'; }
 /* what the A button does right now → [icon key, aria label] */
 function aKey(){
   if(menu) return ['check','Select'];
@@ -957,11 +982,11 @@ function showOSD(text){
 const LINKICONS=[IC.cam,IC.bag,IC.mail,IC.stream];
 function renderLinks(){
   const L=CARTS[2].links;
-  linkmenu.innerHTML='<div class="lmhead">SELECT · A TO OPEN</div>'+
+  linkmenu.innerHTML='<div class="lmhead">SELECT · '+hbic('check')+' TO OPEN</div>'+
     '<div class="tilegrid">'+L.map((l,i)=>
       '<div class="tile'+(i===linkSel?' sel':'')+'" style="--i:'+i+'">'+LINKICONS[i%LINKICONS.length]+
       '<div class="tname">'+l.title+'</div><div class="tsub">'+l.sub+'</div></div>').join('')+'</div>'+
-    '<div class="lmfoot">D-PAD MOVES · A OPENS · B BACK</div>';
+    '<div class="lmfoot">D-PAD MOVES · '+hbic('check')+' OPENS · '+hbic('back')+' BACK</div>';
 }
 function updateSoundHint(){
   soundhint.textContent = soundLocked ? 'PRESS ANY BUTTON FOR SOUND' : 'TAP FOR SOUND';
@@ -982,6 +1007,7 @@ function loadCurrent(){
 }
 function tune(instant){
   if(tuning) return;
+  hideConfirm(); /* a real video change always dismisses a pending confirm */
   document.getElementById('a-a').classList.remove('ended');
   const c=CARTS[cart], isLinks=(cart===2);
   linkmenu.classList.toggle('show',isLinks);
@@ -1004,7 +1030,7 @@ function tune(instant){
   }
   showOSD();
   nowch.textContent=cartLabel()+' · '+c.name;
-  if(isLinks){ nowt.textContent='PICK A LINK'; nows.textContent='D-PAD MOVES · A OPENS'; }
+  if(isLinks){ nowt.textContent='PICK A LINK'; nows.innerHTML='D-PAD MOVES · '+hbic('check')+' OPENS'; }
   else{ nowt.textContent=c.items[item].title; nows.textContent=c.items[item].sub; }
   try{if(navigator.vibrate) navigator.vibrate(12);}catch(e){}
   refreshButtons();
@@ -1030,7 +1056,10 @@ function openLink(){
 function unmute(){
   if(!power||!playerReady||!player) return;
   try{ player.unMute(); player.setVolume(100); }catch(e){}
-  muted=false; updateSoundHint(); click(2400); refreshButtons();
+  /* ROOT-CAUSE FIX: the old unmute() left soundLocked=true, so the next dome
+     press after tapping the sound pill was eaten by the lock ritual (coin
+     chime, no action). Every unmute path must clear the lock. */
+  muted=false; soundLocked=false; updateSoundHint(); click(2400); refreshButtons();
 }
 
 /* ================= POWER ================= */
@@ -1054,9 +1083,55 @@ function pressFx(el,f){
   el.classList.add('pressed');
   setTimeout(()=>el.classList.remove('pressed'),120);
   /* the unlocking press ONLY brings the sound — no other action fires,
-     so "press any button" does exactly what it promises */
-  if(soundLocked&&power){ unlockSound(); return true; }
+     so "press any button" does exactly what it promises.
+     EXCEPT next/prev: the unlocking press also pops their confirm dialog,
+     so the first press is never silent nothing. */
+  if(soundLocked&&power){ unlockSound(); lockedPress(el.id); return true; }
   click(f); return false;
+}
+/* true when the screen is plain video playback (dialog scope) */
+function isVideoMode(){ return power && !menu && !mus && !musPlaying && cart!==2; }
+/* the unlocking press confirms instead of acting, for next/prev only */
+function lockedPress(id){
+  if(!isVideoMode()) return;
+  if(id==='a-a') showConfirm(1);
+  else if(id==='a-b') showConfirm(-1);
+}
+/* ============ POKéMON CONFIRM DIALOG — next / previous video ============ */
+let confirmDir=0, confirmTimer=null, cfType=null;
+const confirmEl=document.getElementById('confirm'),
+      confirmQ=document.getElementById('confirmQ'),
+      confirmT=document.getElementById('confirmT');
+const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function typeText(el,text){
+  clearInterval(cfType);
+  if(reduceMotion){ el.textContent=text; return; }
+  el.textContent=''; let i=0;
+  cfType=setInterval(()=>{ i++; el.textContent=text.slice(0,i);
+    if(i>=text.length) clearInterval(cfType); },16);
+}
+function showConfirm(d){
+  if(!isVideoMode()) return;
+  const c=CARTS[cart], len=c.items.length, ni=(item+d+len)%len;
+  confirmDir=d; clearTimeout(confirmTimer);
+  clearTimeout(confirmEl._ht); confirmEl.classList.remove('fade');
+  confirmQ.textContent = d===1 ? 'NEXT VIDEO?' : 'PREVIOUS VIDEO?';
+  typeText(confirmT, (d===1?'\u25B6 ':'\u25C0 ')+c.items[ni].title);
+  confirmEl.classList.add('show');
+  clearTimeout(confirmTimer);
+  confirmTimer=setTimeout(hideConfirm,3000);
+}
+function hideConfirm(){
+  confirmDir=0; clearTimeout(confirmTimer); clearInterval(cfType);
+  if(!confirmEl.classList.contains('show')) return;
+  confirmEl.classList.add('fade');
+  clearTimeout(confirmEl._ht);
+  confirmEl._ht=setTimeout(()=>confirmEl.classList.remove('show','fade'),220);
+}
+/* every next/prev press in video mode: first press confirms, second executes */
+function videoNav(d){
+  if(confirmDir===d){ hideConfirm(); nextItem(d); }
+  else showConfirm(d);
 }
 /* PRESS ANY BUTTON ritual: first control press unmutes with a coin chime */
 function unlockSound(){
@@ -1092,8 +1167,8 @@ document.querySelectorAll('#dpad .dir').forEach(b=>{
       click(1400);
       renderLinks();
     }else{
-      if(d==='left') nextItem(-1);
-      else if(d==='right') nextItem(1);
+      if(d==='left') videoNav(-1);
+      else if(d==='right') videoNav(1);
       else nextCart(d==='up'?-1:1);
     }
   });
@@ -1102,14 +1177,15 @@ function bindAB(id,fn,f){
   const b=document.getElementById(id);
   b.addEventListener('click',e=>{e.stopPropagation(); if(pressFx(b,f)) return; fn();});
 }
-bindAB('a-a',()=>{ if(!power) return; if(menu){ menuSelect(); return; } if(mus){ musicSelect(); return; } if(musPlaying){ trackVideoNext(1); return; } if(cart===2) openLink(); else nextItem(1); },2100);
+bindAB('a-a',()=>{ if(!power) return; if(menu){ menuSelect(); return; } if(mus){ musicSelect(); return; } if(musPlaying){ trackVideoNext(1); return; } if(cart===2){ openLink(); return; } videoNav(1); },2100);
 bindAB('a-b',()=>{
   if(!power) return;
   if(helpOpen){ setHelp(false); return; }
   if(menu){ menuBack(); return; }
   if(mus){ musicBack(); return; }
   if(musPlaying){ musicVideoBack(); return; }
-  if(cart===2) nextCart(-1); else nextItem(-1);
+  if(cart===2){ nextCart(-1); return; }
+  videoNav(-1);
 },1700);
 bindAB('a-x',()=>{
   if(!power||!playerReady||!player) return;
@@ -1139,7 +1215,9 @@ const shelltoast=document.getElementById('shelltoast');
 function setShell(id){
   const s=SHELLS.find(x=>x.id===id)||SHELLS[0];
   document.body.dataset.shell=s.id;
-  shelltag.textContent=s.label;
+  shellname.textContent=s.label;
+  shelldot.style.background=s.hi;
+  shelldot.style.boxShadow='0 0 6px '+s.hi;
   /* full-screen color flash — unmissable */
   shellflash.style.background=s.hi;
   shellflash.classList.remove('go'); void shellflash.offsetWidth; shellflash.classList.add('go');
@@ -1159,7 +1237,8 @@ function cycleShell(d){
 try{
   const s=localStorage.getItem('ygaddie-shell');
   if(s&&SHELLS.some(x=>x.id===s)){ document.body.dataset.shell=s;
-    shelltag.textContent=SHELLS.find(x=>x.id===s).label; }
+    const sh=SHELLS.find(x=>x.id===s); shellname.textContent=sh.label;
+    shelldot.style.background=sh.hi; shelldot.style.boxShadow='0 0 6px '+sh.hi; }
   /* ALWAYS boot into the headliner music video — never restore a menu view.
      Only the shell color persists; the view always starts at video playback. */
   cart=0; item=0; linkSel=0;
@@ -1171,7 +1250,7 @@ try{
 /* ================= START MENU ================= */
 const menuEl=document.getElementById('menu');
 let menu=null; /* null | {level:0,tab} | {level:1,tab:0,item} */
-function openMenu(){ closeMusic(); menu={level:0,tab:0,item:0}; renderMenu(); menuEl.classList.add('show'); click(1200); refreshButtons(); }
+function openMenu(){ hideConfirm(); closeMusic(); menu={level:0,tab:0,item:0}; renderMenu(); menuEl.classList.add('show'); click(1200); refreshButtons(); }
 function closeMenu(){ menu=null; menuEl.classList.remove('show'); refreshButtons(); }
 function renderMenu(){
   let h;
@@ -1181,13 +1260,13 @@ function renderMenu(){
       ['VIDEOS','MUSIC','LINKS'].map((t,i)=>
         '<div class="mitem'+(i===menu.tab?' sel':'')+'" style="--i:'+i+'">'+t+
         '<span class="msub">'+subs[i]+'</span></div>').join('')+
-      '</div><div class="mfoot">A SELECTS · B BACKS OUT</div>';
+      '</div><div class="mfoot">'+hbic('check')+' SELECTS · '+hbic('back')+' BACKS OUT</div>';
   }else{
     h='<div class="mhead">VIDEOS — PICK ONE</div><div class="mbody">'+
       CARTS[0].items.map((v,i)=>
         '<div class="mitem'+(i===menu.item?' sel':'')+'" style="--i:'+i+'">'+v.title+
         '<span class="msub">'+v.sub+'</span></div>').join('')+
-      '</div><div class="mfoot">A PLAYS · B BACK</div>';
+      '</div><div class="mfoot">'+hbic('play')+' PLAYS · '+hbic('back')+' BACK</div>';
   }
   menuEl.innerHTML=h;
   const sel=menuEl.querySelector('.mitem.sel');
@@ -1221,7 +1300,7 @@ function menuBack(){
 const musicEl=document.getElementById('music');
 let mus=null;        /* null | {level:0,album} | {level:1,album,track} */
 let musPlaying=null; /* {a,t,video} while a track video owns the screen */
-function openMusic(){ mus={level:0,album:0}; splashTop=0;
+function openMusic(){ hideConfirm(); mus={level:0,album:0}; splashTop=0;
   /* preload all covers so tape swaps are instant from cache */
   ALBUMS.forEach(a=>{const im=new Image();im.src=a.cover;});
   renderMusic(); musicEl.classList.add('show'); click(1200); refreshButtons(); }
@@ -1242,7 +1321,7 @@ function renderMusic(){
       '<img class="art" alt="" onerror="this.remove()"></div>'+
       '<div class="scrim"></div>'+
       '<div class="mhead">MUSIC · PICK A TAPE</div>'+
-      '<div class="mfoot"><div class="mnow">'+sa.title+'</div>D-PAD TOGGLES · A OPENS · B BACK</div>';
+      '<div class="mfoot"><div class="mnow">'+sa.title+'</div>D-PAD TOGGLES · '+hbic('check')+' OPENS · '+hbic('back')+' BACK</div>';
   }else{
     const a=ALBUMS[mus.album];
     h='<div class="mhead">MUSIC · '+a.title+'</div>'+
@@ -1255,7 +1334,7 @@ function renderMusic(){
         '<div class="td">'+t.d+'</div>'+
         '<div class="tbtn">'+(t.video?IC.play:IC.stream)+'</div>'+
         '</div>').join('')+'</div>'+
-      '<div class="mfoot">'+(a.tracks[mus.track].video?'A PLAYS THE VIDEO':'A STREAMS THE TAPE')+' · B BACK</div>';
+      '<div class="mfoot">'+hbic('play')+' '+(a.tracks[mus.track].video?'PLAYS THE VIDEO':'STREAMS THE TAPE')+' · '+hbic('back')+' BACK</div>';
   }
   musicEl.innerHTML=h;
   const sel=musicEl.querySelector('.sel');
