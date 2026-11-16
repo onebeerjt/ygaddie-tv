@@ -6,6 +6,9 @@
 <meta name="theme-color" content="#0a0f05">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <title>A$AP ANT · POCKET PLAYER — MARINO INFANTRY</title>
 <meta name="description" content="All A$AP Ant in one pocket player — flip through the videos, run the 175-track vault, hit the links. Marino Infantry.">
 <!-- Rich link preview (iMessage / social) -->
@@ -696,6 +699,14 @@ body.theater #fsexit{display:flex}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 16.5v-3M6 17.5V9M9 17.5v-5"/><path d="M11.5 17.5h5.8a3.2 3.2 0 0 0 .6-6.34 4.7 4.7 0 0 0-9.2 1.1 2.6 2.6 0 0 0 2.8 5.24z"/></svg>
       <span>SOUNDCLOUD</span><small>@YGADDIE</small>
     </a>
+    <a class="svc" href="https://open.spotify.com/artist/45m1IiS45uD1HcPlYkNWKj" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8 10.2c2.7-.8 5.5-.5 8 .9M8.2 13c2.2-.6 4.4-.3 6.4.9M8.4 15.7c1.8-.5 3.5-.2 5 .8"/></svg>
+      <span>SPOTIFY</span><small>A$AP ANT</small>
+    </a>
+    <a class="svc" href="https://music.apple.com/us/song/wock-age-like-wine-feat-lulu-p/6770439520" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18.5V6l10-2v11.5"/><circle cx="6.5" cy="18.5" r="2.5"/><circle cx="16.5" cy="15.5" r="2.5"/></svg>
+      <span>APPLE MUSIC</span><small>ALL SO SIMPLE</small>
+    </a>
     <a class="svc" href="https://ffm.to/all-so-simple" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 14a5 5 0 0 0 7.1 0l2.8-2.8a5 5 0 0 0-7.1-7.1l-1.6 1.6"/><path d="M14 10a5 5 0 0 0-7.1 0l-2.8 2.8a5 5 0 0 0 7.1 7.1l1.6-1.6"/></svg>
       <span>ALL PLATFORMS</span><small>SPOTIFY · APPLE · TIDAL</small>
@@ -718,19 +729,22 @@ body.theater #fsexit{display:flex}
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 /* ================= DATA ================= */
-/* Videos verified live 2026-10-06: @ygaddie's IG bio link (ffm.to/all-so-simple,
-   the ALL SO SIMPLE tape) + his "LINK IN BIO" reels + official videos.
-   HUEY P IN HELLCAT leads — dropped Oct 2026, the newest video. */
+/* Videos re-verified live 2026-11-16 against the MARINO INFANTRY YouTube
+   channel listing, newest first. HUEY P IN HELLCAT (Oct 2026) still leads;
+   the 2026 leak and WAR CHEST added; MARINO PARIS CH. 2 now points at the
+   official video (a5ZsibKdiJQ, Jul 2026) — the tape upload moved down. */
 const CARTS = [
   { name:'MUSIC VIDEOS', items:[
     { title:'HUEY P IN HELLCAT',     sub:'ANT & LORD FUBU FT. GOD ZEUS · NEW VIDEO',video:'y46k227vmSI' },
+    { title:'WHEN GOIN ON TOUR??',   sub:'2026 LEAK · NEW PROJECT SOON',          video:'xaBMw_H321Q' },
     { title:'UCONN FREESTYLE',       sub:'ANT & LORD FUBU FT. SODUH · LINK IN BIO',video:'NSK-9UcMrEM' },
+    { title:'MARINO PARIS · CH. 2',  sub:'ANT, LORD FUBU & JMK$ · OFFICIAL VIDEO',video:'a5ZsibKdiJQ' },
+    { title:'WAR CHEST',             sub:'ANT & LORD FUBU · ALL SO SIMPLE',       video:'r8N4eMn2OVc' },
     { title:'COUNT PICCOLO',         sub:'ADDIE PITINO 2 · DIR. ARTHURLVZ',        video:'UaL0ziqQjjo' },
     { title:'ONLY TRUST ME',         sub:'BACK ON GRID · ADDIE PITINO 2',          video:'0_H_zJmXFn4' },
     { title:'ARM IN THE RIM',        sub:'FT. TONY SHHNOW · ADDIE PITINO 2',       video:'APsY6cXE4dU' },
     { title:'4TH QUARTER',           sub:'PROD. POLARBWOY · ADDIE PITINO 2',       video:'z8f1wyUqdzs' },
     { title:'TESTAROSSA',            sub:'YGADDIE ft. Hoodrich Pablo & Offset',   video:'YlqHQJjqaw0' },
-    { title:'MARINO PARIS · CH. 2',  sub:'ANT & LORD FUBU FT. JMK$',              video:'DbI_ZDw3jxg' },
     { title:'GOYARD UMBRELLA',       sub:'OFFICIAL VIDEO',                        video:'z0fC-hB_7H0' },
     { title:'SWITCH THE WEATHER',    sub:'OFFICIAL VIDEO',                        video:'24h7bXajVKw' },
     { title:'RED CREAM SODA',        sub:'OFFICIAL MUSIC VIDEO',                  video:'7Bwn_nW-w6g' },
@@ -739,7 +753,7 @@ const CARTS = [
     { title:'DRUMLINE FREESTYLE',    sub:'ANT & LORD FUBU · OFFICIAL VIDEO',      video:'GtiSl5fcdI8' },
     { title:'$CHOLAR',               sub:'ANT & SODUH · PROD. LORD FUBU',         video:'SWe1gm2NbBo' },
     { title:'LOBSTER FREESTYLE',     sub:'DJ NICK EXCLUSIVE',                     video:'pDSXICGx4iA' },
-    { title:'MARINO PARIS · ALT CUT',sub:'SHOT ON FILM',                         video:'a5ZsibKdiJQ' },
+    { title:'MARINO PARIS · TAPE VER',sub:'ALL SO SIMPLE · ALBUM UPLOAD',         video:'DbI_ZDw3jxg' },
     { title:'THE PRELUDE · FULL EP', sub:'FULL TAPE STREAM',                      video:'8LPLL5iHV4o' },
     { title:'INFANTRY SUPPLY',       sub:'CHROME HEARTS TEE VIDEO',               video:'D762ONFvyFY' },
   ]},
@@ -749,7 +763,7 @@ const CARTS = [
   ]},
   { name:'LINKS', links:[
     { title:'INSTAGRAM',        sub:'@YGADDIE',                 url:'https://instagram.com/ygaddie' },
-    { title:'MARINO INFANTRY',  sub:'SHOP · INFANTRYSKATE.COM', url:'https://infantryskate.com' },
+    { title:'MARINO INFANTRY',  sub:'SHOP · MARINOINFANTRY.STORE', url:'https://marinoinfantry.store' },
     { title:'BOOKING',          sub:'YGADDIEBOOKINGS@YAHOO.COM',url:'mailto:YGADDIEBOOKINGS@YAHOO.COM' },
     { title:'ALL SO SIMPLE',    sub:'STREAM EVERYWHERE',        url:'https://ffm.to/all-so-simple' },
   ]},
@@ -1713,16 +1727,19 @@ const HUBIC={
   x:'<svg class="fx" viewBox="0 0 24 24"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.3l-4.9-6.4L6.4 22H3.3l7.3-8.3L1.6 2H8l4.4 5.9L18.9 2zm-1.1 17.8h1.7L7.1 3.9H5.3l12.5 16z"/></svg>',
   close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>'
 };
-/* streaming profiles verified 2026-10-06: YouTube @marinoinfantry via oEmbed
-   (uploader of HUEY P IN HELLCAT); SoundCloud /ygaddie from his official
-   video descriptions; ffm.to/all-so-simple is his IG-bio smart link.
-   Spotify/Apple/Tidal/Audiomack artist URLs were truncated in every source —
-   not hardcoded; the smart link covers them. */
+/* streaming profiles verified 2026-10-06, re-verified 2026-11-16: YouTube
+   @marinoinfantry via oEmbed (uploader of HUEY P IN HELLCAT); SoundCloud
+   /ygaddie from his official video descriptions; ffm.to/all-so-simple is
+   his IG-bio smart link. Spotify artist ID 45m1IiS45uD1HcPlYkNWKj verified
+   2026-11-16 via Spotify's official track embed; the Apple Music entry
+   points at the verified ALL SO SIMPLE song page (album ID unverified). */
 const HUBLINKS=[
   {title:'INSTAGRAM', sub:'@YGADDIE', url:'https://instagram.com/ygaddie', icon:'cam'},
   {title:'YOUTUBE', sub:'@MARINOINFANTRY', url:'https://www.youtube.com/@marinoinfantry', icon:'yt'},
   {title:'X / TWITTER', sub:'@YGADDIE', url:'https://twitter.com/ygaddie', icon:'x'},
-  {title:'MARINO INFANTRY', sub:'SHOP · INFANTRYSKATE.COM', url:'https://infantryskate.com', icon:'bag'},
+  {title:'MARINO INFANTRY', sub:'SHOP · MARINOINFANTRY.STORE', url:'https://marinoinfantry.store', icon:'bag'},
+  {title:'SPOTIFY', sub:'A$AP ANT', url:'https://open.spotify.com/artist/45m1IiS45uD1HcPlYkNWKj', icon:'stream'},
+  {title:'APPLE MUSIC', sub:'ALL SO SIMPLE', url:'https://music.apple.com/us/song/wock-age-like-wine-feat-lulu-p/6770439520', icon:'stream'},
   {title:'BOOKING', sub:'YGADDIEBOOKINGS@YAHOO.COM', url:'mailto:YGADDIEBOOKINGS@YAHOO.COM', icon:'mail'},
   {title:'ALL SO SIMPLE', sub:'STREAM EVERYWHERE', url:'https://ffm.to/all-so-simple', icon:'stream'},
 ];
